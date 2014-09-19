@@ -20,7 +20,7 @@ public class MapActivity extends Activity{
 	  protected void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
 	    setContentView(R.layout.map);
-	    map = ((MapFragment) getFragmentManager().findFragmentById(R.id.fragment1))
+	    map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
 	        .getMap();
 	    
 	    if (map!=null){
