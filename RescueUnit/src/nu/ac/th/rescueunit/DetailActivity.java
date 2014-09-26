@@ -10,7 +10,7 @@ public class DetailActivity extends Activity{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.detail);
+		setContentView(R.layout.activity_detail);
 		
 		final Button btnMap = (Button)findViewById(R.id.btn_map);
 		btnMap.setOnClickListener(new Button.OnClickListener(){

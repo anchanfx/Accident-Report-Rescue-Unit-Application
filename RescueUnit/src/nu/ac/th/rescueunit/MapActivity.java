@@ -19,7 +19,7 @@ public class MapActivity extends Activity{
 	  @Override
 	  protected void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
-	    setContentView(R.layout.map);
+	    setContentView(R.layout.activity_map);
 	    map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
 	        .getMap();
 	    
