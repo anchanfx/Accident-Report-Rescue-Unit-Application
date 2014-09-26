@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="unknown">Unknown Error</string>
+    <string name="no_connection">No Connection</string>
+    <string name="no_respond">Server is not responding</string>
+</resources>
