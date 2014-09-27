@@ -15,7 +15,7 @@ public class MissionReportConverter {
 			jsonMissionReport.put(JSONKeys.RESCUE_STATE, missionReport.getRescueState());
 			jsonMissionReport.put(JSONKeys.MESSAGE, missionReport.getMessage());
 			
-			holder.put(JSONKeys.JSON_OBJECT_MISSION_REPORT, jsonMissionReport);
+			holder.put(JSONKeys.JSON_MISSION_REPORT, jsonMissionReport);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}

@@ -46,14 +46,14 @@ public class AccidentDataConverterTest {
     	 * 			"AdditionalInfo" : { } 
     	 * 	} }"
 		*/
-    	String jsonString = "{ \"" + JSONKeys.JSON_OBJECT_ACCIDENT_DATA + 
+    	String jsonString = "{ \"" + JSONKeys.JSON_ACCIDENT_DATA + 
     							"\" : {\"" + JSONKeys.ACCIDENT_ID + "\" : " + accidentId + 
-    							", \"" + JSONKeys.JSON_OBJECT_POSITION +
+    							", \"" + JSONKeys.JSON_POSITION +
     							"\" : {" +
     							"\"" + JSONKeys.LATITUDE + "\" : " + latitude +
     							", \"" + JSONKeys.LONGITUDE + "\" : " + longitude +
     							"}," +
-    							"\"" + JSONKeys.JSON_OBJECT_ADDITIONAL_INFO +
+    							"\"" + JSONKeys.JSON_ADDITIONAL_INFO +
     							"\" : {" +
     							"\"" + JSONKeys.ACCIDENT_TYPE + "\" : \"" + accidentType +
     							"\", \"" + JSONKeys.AMOUNT_OF_INJURED + "\" : " + amountOfInjured +

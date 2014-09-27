@@ -1,6 +1,6 @@
 package nu.ac.th.rescueunit;
 
-import static nu.ac.th.rescueunit.PHP_JAVA_Converter.convertBooleanInPhpToJava;
+import static nu.ac.th.rescueunit.Compatibility_PHP_JAVA.convertBooleanInPhpToJava;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,11 +15,11 @@ public class AccidentDataConverter {
 		
 		try {
 			JSONObject jsonObject_AccidentData = 
-					jsonObject.getJSONObject(JSONKeys.JSON_OBJECT_ACCIDENT_DATA);
+					jsonObject.getJSONObject(JSONKeys.JSON_ACCIDENT_DATA);
 			JSONObject jsonObject_Position =
-					jsonObject_AccidentData.getJSONObject(JSONKeys.JSON_OBJECT_POSITION);
+					jsonObject_AccidentData.getJSONObject(JSONKeys.JSON_POSITION);
 			JSONObject jsonObject_AdditionalInfo =
-					jsonObject_AccidentData.getJSONObject(JSONKeys.JSON_OBJECT_ADDITIONAL_INFO);
+					jsonObject_AccidentData.getJSONObject(JSONKeys.JSON_ADDITIONAL_INFO);
 			
 			accidentID = jsonObject_AccidentData.getInt(JSONKeys.ACCIDENT_ID);
 			position = new Position(

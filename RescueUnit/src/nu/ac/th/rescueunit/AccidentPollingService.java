@@ -1,6 +1,8 @@
 package nu.ac.th.rescueunit;
 
-import static nu.ac.th.rescueunit.NotificationID.AccidentReceived;
+import static nu.ac.th.rescueunit.NotificationID.INCOMING_ACCIDENT;
+import static nu.ac.th.rescueunit.ApplicationSettings.*;
+
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -22,15 +24,18 @@ public class AccidentPollingService extends Service {
 	
 	private Thread thread;
 	private PollAccidentListener threadListener;
-	private NotificationManager notificationManager;
+	
 	private Intent intent;
 	private PendingIntent pIntent;
 	private Intent reportMissionIntent;
 	private PendingIntent reportMissionPIntent;
+	
+	private NotificationManager notificationManager;
 	private long[] notificationVibratePattern;
 	private LocalBroadcastManager broadcaster;
+	
 	private MissionReport missionReport;
-	private PollAccidentData pollAccidentData;
+	private AccidentPollingData pollAccidentData;
 	@Override
 	public IBinder onBind(Intent arg0) {
 		return null;
@@ -40,13 +45,10 @@ public class AccidentPollingService extends Service {
 	public void onCreate() {
 		super.onCreate();
 		intent = new Intent(this, MainActivity.class);
-		reportMissionIntent = new Intent(this, MissionReportService.class);
 		pIntent = PendingIntent.getActivity(this, 0, intent, 0);
-		reportMissionPIntent = PendingIntent.getService(this, 0, reportMissionIntent, 0);
-		
 		missionReport = null;
 		notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-		notificationVibratePattern = new long[]{50, 100, 50, 100, 50, 100, 50, 500};
+		notificationVibratePattern = NOTIFICATION_VIBRATE_PATTERN;
 		broadcaster = LocalBroadcastManager.getInstance(this);
 		threadListener = new PollAccidentListener() {
 			@Override
@@ -58,21 +60,26 @@ public class AccidentPollingService extends Service {
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		pollAccidentData = (PollAccidentData)intent.getSerializableExtra(POLL_ACCIDENT_DATA);
-		Log.v("FAXXXX", "INSIDE service onStartCommand");
+		pollAccidentData = (AccidentPollingData)intent.getSerializableExtra(POLL_ACCIDENT_DATA);
 		thread = new Thread(new PollAccident(
 				threadListener, POLLING_INTERVAL, pollAccidentData, new TCP_IP()));
 		thread.start();
-		return START_STICKY;
+		return START_NOT_STICKY;
 	}
 
 	private void processReceivedData(AccidentData accidentData) {
-		missionReport = new MissionReport(
-				pollAccidentData.getImei(), accidentData.getAccidentID(),
-				RescueState.ACCEPT, "");
-		reportMissionIntent.putExtra(MissionReportService.MISSION_REPORT_DATA, missionReport);
+		prepareReportMissionIntent(accidentData);
 		sendNotification(accidentData);
 		sendLocalBroadCast(accidentData);
+	}
+	
+	private void prepareReportMissionIntent(AccidentData accidentData) {
+		missionReport = new MissionReport(pollAccidentData.getImei(),
+				accidentData.getAccidentID(), RescueState.ACCEPT, "");
+		
+		reportMissionIntent = new Intent(this, MissionReportService.class);
+		reportMissionIntent.putExtra(MissionReportService.MISSION_REPORT_DATA, missionReport);
+		reportMissionPIntent = PendingIntent.getService(this, 0, reportMissionIntent, 0);
 	}
 	
 	private void sendNotification(AccidentData accidentData) {
@@ -95,10 +102,10 @@ public class AccidentPollingService extends Service {
             /** End Area : Need API 4.1 or higer to work! **/
 		    .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
 	    	.setVibrate(notificationVibratePattern)
-	    	.setAutoCancel(false)
+	    	.setAutoCancel(true)
 	        .build();
 	   
-	   notificationManager.notify(AccidentReceived, noti);
+	   notificationManager.notify(INCOMING_ACCIDENT, noti);
 	}
 	
 	private void sendLocalBroadCast(AccidentData accidentData) {

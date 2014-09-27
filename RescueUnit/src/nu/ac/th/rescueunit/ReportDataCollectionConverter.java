@@ -42,9 +42,9 @@ public class ReportDataCollectionConverter {
 			/*Date*/
 			//jsonObject_Date.put(JSONKeys.TIME, date.getTime());
 			
-			jsonObject_RescueData.put(JSONKeys.JSON_OBJECT_POSITION, jsonObject_Position);
-			jsonObject_RescueData.put(JSONKeys.JSON_OBJECT_RESCUE_STATUS, jsonObject_RescueStatus);			
-			holder.put(JSONKeys.JSON_OBJECT_RESCUE_DATA,jsonObject_RescueData);
+			jsonObject_RescueData.put(JSONKeys.JSON_POSITION, jsonObject_Position);
+			jsonObject_RescueData.put(JSONKeys.JSON_RESCUE_STATUS, jsonObject_RescueStatus);			
+			holder.put(JSONKeys.JSON_RESCUE_DATA,jsonObject_RescueData);
 			//holder.put(JSONKeys.JSON_OBJECT_DATE, jsonObject_Date);
 		} catch (JSONException e) {
 			e.printStackTrace();

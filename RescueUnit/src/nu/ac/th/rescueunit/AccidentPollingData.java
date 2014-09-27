@@ -2,14 +2,14 @@ package nu.ac.th.rescueunit;
 
 import java.io.Serializable;
 
-public class PollAccidentData implements Serializable {
+public class AccidentPollingData implements Serializable {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 262718990056476428L;
 	String imei;
 
-	public PollAccidentData(String imei) {
+	public AccidentPollingData(String imei) {
 		super();
 		this.imei = imei;
 	}

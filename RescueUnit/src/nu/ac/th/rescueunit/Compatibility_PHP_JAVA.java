@@ -1,6 +1,6 @@
 package nu.ac.th.rescueunit;
 
-public class PHP_JAVA_Converter {
+public class Compatibility_PHP_JAVA {
 	
 	public static boolean convertBooleanInPhpToJava(int booleanInt) {
 		return booleanInt == 1;

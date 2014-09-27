@@ -31,7 +31,7 @@ public class MissionReportConverterTest {
 		JSONObject actual = MissionReportConverter.toJSON(missonReport);
 		
 		// { "MissionReport": { "IMEI":"", "AccidentID":x, "RescueState":x, "Message":"" } }
-		String jsonString = "{ \""+ JSONKeys.JSON_OBJECT_MISSION_REPORT + 
+		String jsonString = "{ \""+ JSONKeys.JSON_MISSION_REPORT + 
 							"\" : {\""+ JSONKeys.IMEI + "\" : \"" + testIMEI + 
 							"\", \"" + JSONKeys.ACCIDENT_ID + "\" : " + testID +
 							", \"" + JSONKeys.RESCUE_STATE + "\" : " + testRescueState +

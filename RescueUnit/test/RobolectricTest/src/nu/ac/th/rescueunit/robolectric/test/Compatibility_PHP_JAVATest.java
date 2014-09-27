@@ -2,7 +2,7 @@ package nu.ac.th.rescueunit.robolectric.test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
-import nu.ac.th.rescueunit.PHP_JAVA_Converter;
+import nu.ac.th.rescueunit.Compatibility_PHP_JAVA;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -10,7 +10,7 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
 @RunWith(RobolectricTestRunner.class)
-public class PHP_JAVA_ConverterTest {
+public class Compatibility_PHP_JAVATest {
 	
 	int intFalse;
 	int intTrue;
@@ -23,8 +23,8 @@ public class PHP_JAVA_ConverterTest {
 	
 	@Test
 	public void testConvertBooleanInPhpToJava() throws Exception {
-		boolean actual1 = PHP_JAVA_Converter.convertBooleanInPhpToJava(intFalse);
-		boolean actual2 = PHP_JAVA_Converter.convertBooleanInPhpToJava(intTrue);
+		boolean actual1 = Compatibility_PHP_JAVA.convertBooleanInPhpToJava(intFalse);
+		boolean actual2 = Compatibility_PHP_JAVA.convertBooleanInPhpToJava(intTrue);
 		boolean expect1 = false;
 		boolean expect2 = true;
 		

@@ -1,14 +1,14 @@
 package nu.ac.th.rescueunit;
 
-public class AcknowledgeInfo {
+public class AcknowledgeData {
 	private String message;
 
 	
-	public AcknowledgeInfo() {
+	public AcknowledgeData() {
 		this("");
 	}
 
-	public AcknowledgeInfo(String message) {
+	public AcknowledgeData(String message) {
 		super();
 		this.message = message;
 	}
