@@ -1,6 +1,6 @@
 package nu.ac.th.rescueunit;
 
-public class AccidentData {
+public class AccidentData{
 	private int accidentID;
 	private Position mPosition;
 	private AdditionalInfo mAdditionalInfo;

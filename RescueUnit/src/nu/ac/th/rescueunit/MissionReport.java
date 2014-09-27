@@ -1,13 +1,18 @@
 package nu.ac.th.rescueunit;
 
-public class MissionReport {
+import java.io.Serializable;
+
+public class MissionReport implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8647277689058953051L;
 	private String imei;
 	private int accidentID;
 	private int rescueState;
 	private String message;
 	
-	public MissionReport(String imei, int accidentID, int rescueState,
-			String message) {
+	public MissionReport(String imei, int accidentID, int rescueState, String message) {
 		super();
 		this.imei = imei;
 		this.accidentID = accidentID;

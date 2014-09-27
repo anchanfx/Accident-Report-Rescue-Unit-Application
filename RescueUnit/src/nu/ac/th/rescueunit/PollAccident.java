@@ -25,12 +25,13 @@ public class PollAccident implements Runnable {
 		
 		while(true) {
 			try {
-				
+				Log.v("FAXXXX", "INSIDE THREAD LOOP");
 				try {
 					data = connector.pollAccident(pollAccidentData);
 					listener.onDataReceived(data);
 				} catch (ApplicationException e) {
 					// NO CONNECTION, NO RESPOND, EMPTY RESPOND?
+					Log.v("FAXXXX", "NO RESPOND?");
 				}
 				
 				TimeUnit.SECONDS.sleep(pollingInterval);

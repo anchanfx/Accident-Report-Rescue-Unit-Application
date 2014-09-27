@@ -29,7 +29,8 @@
         android:theme="@style/AppTheme" >
         
         <service android:name=".AccidentPollingService"></service>
-         
+        <service android:name=".MissionReportService"></service>
+        
          <receiver android:name=".AccidentPollingService_BroadcastReceiver" >  
 		    <intent-filter >  
 		        <action android:name="android.intent.action.BOOT_COMPLETED" />
