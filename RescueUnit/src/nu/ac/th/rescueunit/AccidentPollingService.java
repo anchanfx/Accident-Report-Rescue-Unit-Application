@@ -75,9 +75,11 @@ public class AccidentPollingService extends Service {
 			.setContentIntent(pendingIntent)
 			/** Begin Area : Need API 4.1 or higer to work! **/
 			.setStyle(new NotificationCompat.BigTextStyle()
-				.bigText(position.toString() + "\n" + additionalInfo.toString()))
-			.addAction (R.drawable.ic_launcher,"BTN1", pendingIntent)
-            .addAction (R.drawable.ic_launcher,"BTN2", pendingIntent)
+				.bigText(accidentData.getAccidentID() + "\n" +
+							position.toString() + "\n" + 
+							additionalInfo.toString()))
+			.addAction (R.drawable.ic_launcher,"Accept", pendingIntent)
+            .addAction (R.drawable.ic_launcher,"Reject", pendingIntent)
             /** End Area : Need API 4.1 or higer to work! **/
 		    .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
 	    	.setVibrate(notificationVibratePattern)

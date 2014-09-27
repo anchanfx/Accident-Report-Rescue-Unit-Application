@@ -2,6 +2,7 @@ package nu.ac.th.rescueunit;
 
 public class JSONKeys {
 	public static final String JSON_OBJECT_ACCIDENT_DATA = "AccidentData";
+		public static final String ACCIDENT_ID = "AccidentID";
 		public static final String JSON_OBJECT_POSITION = "Position";
 			public static final String LATITUDE = "Latitude";
 			public static final String LONGITUDE = "Longitude";
@@ -19,8 +20,9 @@ public class JSONKeys {
 			public static final String IMEI = "IMEI";
 
 	
-	public static final String JSON_OBJECT_ACKNOWLEDGE_INFO = "AcknowledgeInfo";
+	public static final String JSON_OBJECT_MISSION_REPORT = "MissionReport";
+		public static final String RESCUE_STATE = "RescueState";
 		
 	
-				
+	public static final String JSON_OBJECT_ACKNOWLEDGE_INFO = "AcknowledgeInfo";
 }

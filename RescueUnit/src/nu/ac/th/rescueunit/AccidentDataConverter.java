@@ -11,6 +11,7 @@ public class AccidentDataConverter {
 		AccidentData accidentData = null;
 		Position position = null;
 		AdditionalInfo additionalInfo = null;
+		int accidentID = 0;
 		
 		try {
 			JSONObject jsonObject_AccidentData = 
@@ -20,6 +21,7 @@ public class AccidentDataConverter {
 			JSONObject jsonObject_AdditionalInfo =
 					jsonObject_AccidentData.getJSONObject(JSONKeys.JSON_OBJECT_ADDITIONAL_INFO);
 			
+			accidentID = jsonObject_AccidentData.getInt(JSONKeys.ACCIDENT_ID);
 			position = new Position(
 					jsonObject_Position.getDouble(JSONKeys.LATITUDE),
 					jsonObject_Position.getDouble(JSONKeys.LONGITUDE));
@@ -37,7 +39,7 @@ public class AccidentDataConverter {
 			throw new ApplicationException();
 		}
 		
-		accidentData = new AccidentData(position, additionalInfo);
+		accidentData = new AccidentData(accidentID, position, additionalInfo);
 		
 		return accidentData;
 	}

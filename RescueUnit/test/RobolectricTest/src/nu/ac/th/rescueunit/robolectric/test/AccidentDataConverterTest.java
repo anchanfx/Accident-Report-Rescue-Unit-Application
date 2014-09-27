@@ -23,6 +23,7 @@ public class AccidentDataConverterTest {
 	private JSONObject jsonObj;
 
 	
+	private int accidentId = 7;
 	private int latitude = 12;
 	private int longitude = 34;
 	private String accidentType = "TESTTYPE";
@@ -36,16 +37,18 @@ public class AccidentDataConverterTest {
     	position = new Position(latitude, longitude);
     	additionalInfo 
     		= new AdditionalInfo(accidentType, amountOfInjured, amountOfDead, true, message);
-    	testAccidentData = new AccidentData(position, additionalInfo);
+    	testAccidentData = new AccidentData(accidentId, position, additionalInfo);
     	
     	/* 
     	 * "{ "AccidentData" : {
+    	 * 			"AccidentID" : x,
     	 * 			"Position" : { }, 
     	 * 			"AdditionalInfo" : { } 
     	 * 	} }"
 		*/
     	String jsonString = "{ \"" + JSONKeys.JSON_OBJECT_ACCIDENT_DATA + 
-    							"\" : { \"" + JSONKeys.JSON_OBJECT_POSITION +
+    							"\" : {\"" + JSONKeys.ACCIDENT_ID + "\" : " + accidentId + 
+    							", \"" + JSONKeys.JSON_OBJECT_POSITION +
     							"\" : {" +
     							"\"" + JSONKeys.LATITUDE + "\" : " + latitude +
     							", \"" + JSONKeys.LONGITUDE + "\" : " + longitude +
@@ -67,6 +70,9 @@ public class AccidentDataConverterTest {
 		AccidentData actual = AccidentDataConverter.fromJSON(jsonObj);
 		
 		AccidentData expected = testAccidentData;
+		
+		assertThat(actual.getAccidentID(), 
+				equalTo(expected.getAccidentID()));
 		
 		assertThat(actual.getPosition().toString(), 
 					equalTo(expected.getPosition().toString()));

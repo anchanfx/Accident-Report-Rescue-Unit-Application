@@ -1,17 +1,27 @@
 package nu.ac.th.rescueunit;
 
 public class AccidentData {
+	private int accidentID;
 	private Position mPosition;
 	private AdditionalInfo mAdditionalInfo;
 	
 	public AccidentData() {
-		this(new Position(), new AdditionalInfo());
+		this(0, new Position(), new AdditionalInfo());
 	}
 
-	public AccidentData(Position position, AdditionalInfo additionalInfo) {
+	public AccidentData(int accidentID, Position position, AdditionalInfo additionalInfo) {
 		super();
+		this.accidentID = accidentID;
 		mPosition = position;
 		mAdditionalInfo = additionalInfo;
+	}
+
+	public int getAccidentID() {
+		return accidentID;
+	}
+
+	public void setAccidentID(int accidentID) {
+		this.accidentID = accidentID;
 	}
 
 	public Position getPosition() {

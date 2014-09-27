@@ -12,8 +12,8 @@ public class AccidentPollingService_BroadcastReceiver extends BroadcastReceiver 
 	public void onReceive(Context context, Intent intent) {
 		Intent serviceIntent = new Intent(context, AccidentPollingService.class);
 		serviceIntent.putExtra(AccidentPollingService.POLL_ACCIDENT_DATA, 
-				//new PollAccidentData("1"));
-				new PollAccidentData(IMEI.getDeviceIMEI(context)));
+				new PollAccidentData("1"));
+				//new PollAccidentData(IMEI.getDeviceIMEI(context)));
 		context.startService(serviceIntent);
 	}
 }
