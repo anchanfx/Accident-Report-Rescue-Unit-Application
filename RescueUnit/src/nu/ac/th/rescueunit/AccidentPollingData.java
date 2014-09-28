@@ -1,12 +1,7 @@
 package nu.ac.th.rescueunit;
 
-import java.io.Serializable;
 
-public class AccidentPollingData implements Serializable {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 262718990056476428L;
+public class AccidentPollingData {
 	String imei;
 
 	public AccidentPollingData(String imei) {

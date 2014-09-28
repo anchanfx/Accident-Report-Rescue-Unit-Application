@@ -12,7 +12,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 
 public class MissionReportService extends IntentService {
-	public static final String MISSION_REPORT_DATA = "MISSION REPORT DATA";
+	public static final String MISSION_REPORT_DATA = "nu.ac.th.rescueunit.missionreportdata";
 	public static final String BROADCAST 
 		= "nu.ac.th.rescueunit.MissionReportService.BROADCAST";
 	public static final String MESSAGE = "MESSAGE";

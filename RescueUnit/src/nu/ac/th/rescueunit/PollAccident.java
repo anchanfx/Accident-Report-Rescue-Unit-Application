@@ -34,7 +34,7 @@ public class PollAccident implements Runnable {
 				
 				TimeUnit.SECONDS.sleep(pollingInterval);
 			} catch (InterruptedException e) {
-				e.printStackTrace();
+				//e.printStackTrace();
 			}
 		}
 	}

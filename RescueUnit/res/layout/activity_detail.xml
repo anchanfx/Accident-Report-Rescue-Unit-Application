@@ -20,26 +20,26 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/txt_longitude"
         android:layout_toRightOf="@+id/txt_injured"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:text="@string/nodata" />
 
     <TextView
-        android:id="@+id/txtview_show_longitude"
+        android:id="@+id/txt_show_longitude"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/txt_longitude"
         android:layout_alignBottom="@+id/txt_longitude"
         android:layout_marginLeft="16dp"
         android:layout_toRightOf="@+id/txt_traffic_bloack"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:text="@string/nodata" />
 
     <TextView
-        android:id="@+id/txt_longotoude"
+        android:id="@+id/txt_show_latitude"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/txt_latitude"
         android:layout_alignBottom="@+id/txt_latitude"
         android:layout_toRightOf="@+id/txt_message"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:text="@string/nodata" />
 
     <TextView
         android:id="@+id/txt_show_type"
@@ -47,15 +47,15 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/txt_dead"
         android:layout_centerHorizontal="true"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:text="@string/nodata" />
 
     <TextView
-        android:id="@+id/txt_show_detail"
+        android:id="@+id/txt_show_dead"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/txt_dead"
         android:layout_alignLeft="@+id/txt_show_datetime"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:text="@string/nodata" />
 
     <TextView
         android:id="@+id/txt_show_injured"
@@ -63,14 +63,14 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/txt_traffic_bloack"
         android:layout_centerHorizontal="true"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:text="@string/nodata" />
 
     <CheckBox
         android:id="@+id/Yes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/txt_message"
-        android:layout_alignLeft="@+id/txtview_show_longitude"
+        android:layout_alignLeft="@+id/txt_show_longitude"
         android:text="Yes!" />
 
     <TextView
@@ -87,7 +87,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/txt_longitude"
-        android:layout_below="@+id/txtview_show_longitude"
+        android:layout_below="@+id/txt_show_longitude"
         android:text="Latitude :"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
@@ -142,7 +142,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/txt_dead"
         android:layout_below="@+id/txt_message"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:text="@string/nodata" />
 
     <Button
         android:id="@+id/btn_map"
