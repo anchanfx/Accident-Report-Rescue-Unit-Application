@@ -2,11 +2,16 @@ package nu.ac.th.rescueunit.robolectric.test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
+
+import java.util.Calendar;
+import java.util.Date;
+
 import nu.ac.th.rescueunit.AccidentData;
 import nu.ac.th.rescueunit.AccidentDataConverter;
 import nu.ac.th.rescueunit.AdditionalInfo;
 import nu.ac.th.rescueunit.JSONKeys;
 import nu.ac.th.rescueunit.Position;
+import static nu.ac.th.rescueunit.Compatibility_PHP_JAVA.*;
 
 import org.json.JSONObject;
 import org.junit.Before;
@@ -37,13 +42,20 @@ public class AccidentDataConverterTest {
     	position = new Position(latitude, longitude);
     	additionalInfo 
     		= new AdditionalInfo(accidentType, amountOfInjured, amountOfDead, true, message);
-    	testAccidentData = new AccidentData(accidentId, position, additionalInfo);
     	
+    	 //2014-09-28 16:21:51
+    	Long phpTimeStamp = 1411921311L;
+    	Date dateTime = new Date(new Long(timeStampInPhpToJava(phpTimeStamp))); 
+    	
+    	testAccidentData = new AccidentData(accidentId, position, additionalInfo, dateTime);
+    	
+    	//long timeStamp = timeStampInJavaToPhp(dateTime.getTime());
     	/* 
     	 * "{ "AccidentData" : {
     	 * 			"AccidentID" : x,
     	 * 			"Position" : { }, 
-    	 * 			"AdditionalInfo" : { } 
+    	 * 			"AdditionalInfo" : { },
+    	 * 			"Date" : x
     	 * 	} }"
 		*/
     	String jsonString = "{ \"" + JSONKeys.JSON_ACCIDENT_DATA + 
@@ -60,7 +72,7 @@ public class AccidentDataConverterTest {
     							", \"" + JSONKeys.AMOUNT_OF_DEAD + "\" : " + amountOfDead +
     							", \"" + JSONKeys.TRAFFIC_BLOCKED + "\" : " + trafficBlocked +
     							", \"" + JSONKeys.MESSAGE + "\" : \"" + message +
-    							"\"}" +
+    							"\"}, \"" + JSONKeys.DATE_TIME + "\" : " + phpTimeStamp +
     							"} }";
     	jsonObj =  new JSONObject(jsonString);
     }
@@ -71,6 +83,9 @@ public class AccidentDataConverterTest {
 		
 		AccidentData expected = testAccidentData;
 		
+		Long actualTimeStamp = actual.getDateTime().getTime();
+		Long expectTimeStamp = testAccidentData.getDateTime().getTime();
+		
 		assertThat(actual.getAccidentID(), 
 				equalTo(expected.getAccidentID()));
 		
@@ -79,5 +94,7 @@ public class AccidentDataConverterTest {
 		
 		assertThat(actual.getAdditionalInfo().toString(), 
 				equalTo(expected.getAdditionalInfo().toString()));
+		
+		assertThat(actualTimeStamp, equalTo(expectTimeStamp));
 	}
 }

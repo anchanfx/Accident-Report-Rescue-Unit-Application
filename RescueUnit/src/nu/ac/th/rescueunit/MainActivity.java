@@ -2,6 +2,8 @@ package nu.ac.th.rescueunit;
 
 import static nu.ac.th.rescueunit.ServiceUtility.isMyServiceRunning;
 
+import java.util.TimeZone;
+
 import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.content.Intent;

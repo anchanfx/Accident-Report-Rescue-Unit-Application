@@ -1,6 +1,7 @@
 package nu.ac.th.rescueunit;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class AccidentData implements Serializable {
 	/**
@@ -10,16 +11,18 @@ public class AccidentData implements Serializable {
 	private int accidentID;
 	private Position mPosition;
 	private AdditionalInfo mAdditionalInfo;
+	private Date mDateTime;
 	
 	public AccidentData() {
-		this(0, new Position(), new AdditionalInfo());
+		this(0, new Position(), new AdditionalInfo(), new Date());
 	}
 
-	public AccidentData(int accidentID, Position position, AdditionalInfo additionalInfo) {
+	public AccidentData(int accidentID, Position position, AdditionalInfo additionalInfo, Date dateTime) {
 		super();
 		this.accidentID = accidentID;
 		mPosition = position;
 		mAdditionalInfo = additionalInfo;
+		mDateTime = dateTime;
 	}
 
 	public int getAccidentID() {
@@ -44,5 +47,13 @@ public class AccidentData implements Serializable {
 
 	public void setAdditionalInfo(AdditionalInfo additionalInfo) {
 		mAdditionalInfo = additionalInfo;
+	}
+
+	public Date getDateTime() {
+		return mDateTime;
+	}
+
+	public void setDateTime(Date dateTime) {
+		mDateTime = dateTime;
 	}
 }	
