@@ -72,7 +72,7 @@ public class AccidentPollingService extends Service {
 	
 	private void prepareIntents(AccidentData accidentData) {
 		MissionReport accept = new MissionReport(pollAccidentData.getImei(),
-				accidentData.getAccidentID(), RescueState.ACCEPT, "");
+				accidentData.getAccidentID(), RescueState.ACCEPT, ApplicationTime.newDateInstance(), "");
 		
 		detailActivityIntent = new Intent(this, DetailActivity.class);
 		detailActivityIntent.putExtra(DetailActivity.ACCIDENT_DATA, accidentData);

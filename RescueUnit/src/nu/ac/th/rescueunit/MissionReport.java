@@ -1,6 +1,7 @@
 package nu.ac.th.rescueunit;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class MissionReport implements Serializable {
 	/**
@@ -10,16 +11,21 @@ public class MissionReport implements Serializable {
 	private String imei;
 	private int accidentID;
 	private int rescueState;
+	private Date date;
 	private String message;
 	
 	public MissionReport(String imei, int accidentID, int rescueState, String message) {
-		super();
+		this(imei, accidentID, rescueState, new Date(), message);
+	}
+
+	public MissionReport(String imei, int accidentID, int rescueState, Date date, String message) {
 		this.imei = imei;
 		this.accidentID = accidentID;
 		this.rescueState = rescueState;
 		this.message = message;
+		this.date = date;
 	}
-
+	
 	public String getImei() {
 		return imei;
 	}
@@ -43,7 +49,15 @@ public class MissionReport implements Serializable {
 	public void setRescueState(int rescueState) {
 		this.rescueState = rescueState;
 	}
+	
+	public Date getDate() {
+		return date;
+	}
 
+	public void setDate(Date date) {
+		this.date = date;
+	}
+	
 	public String getMessage() {
 		return message;
 	}
