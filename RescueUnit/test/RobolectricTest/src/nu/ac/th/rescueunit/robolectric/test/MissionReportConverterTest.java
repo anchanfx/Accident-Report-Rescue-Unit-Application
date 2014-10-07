@@ -28,7 +28,8 @@ public class MissionReportConverterTest {
 	@Before
 	public void setUp() throws Exception {
 		Date dateTime = new Date(new Long(timeStampInPhpToJava(phpTimeStamp)));
-		missonReport = new MissionReport(testIMEI, testID, testRescueState, dateTime, testMessage);
+		missonReport = new MissionReport(testIMEI, testID, testRescueState, 
+				dateTime, dateTime, testMessage);
 	}
 	
 	@Test
@@ -40,6 +41,7 @@ public class MissionReportConverterTest {
 							"\" : {\""+ JSONKeys.IMEI + "\" : \"" + testIMEI + 
 							"\", \"" + JSONKeys.ACCIDENT_ID + "\" : " + testID +
 							", \"" + JSONKeys.RESCUE_STATE + "\" : " + testRescueState +
+							", \"" + JSONKeys.ASSIGN_DATE_TIME + "\" : " + phpTimeStamp +
 							", \"" + JSONKeys.DATE_TIME + "\" : " + phpTimeStamp +
 							", \"" + JSONKeys.MESSAGE + "\" : \"" + testMessage +
 							"\" }}";

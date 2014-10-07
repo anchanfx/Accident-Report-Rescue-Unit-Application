@@ -66,13 +66,6 @@ public class AccidentPollingService extends Service {
 	}
 
 	private void createAnoymouseInnerType() {
-		threadListener = new PollAccidentListener() {
-			@Override
-			public void onDataReceived(AccidentPollingData accidentPollingData) {
-				processReceivedData(accidentPollingData);
-			}
-		};
-		
 		missionReportBroadcastReceiver = new BroadcastReceiver() {
 			
 			@Override
@@ -83,12 +76,13 @@ public class AccidentPollingService extends Service {
 				processReportAcknowledge(acknowledgeDataCollection);
 			}
 		};
-	}
-	
-	private void processReceivedData(AccidentPollingData accidentPollingData) {
-		reportPendingState(accidentPollingData);
-		notifyIncomingAccident(accidentPollingData);
-		sendLocalBroadCast(accidentPollingData);
+		
+		threadListener = new PollAccidentListener() {
+			@Override
+			public void onDataReceived(AccidentPollingData accidentPollingData) {
+				processReceivedData(accidentPollingData);
+			}
+		};
 	}
 	
 	private void processReportAcknowledge(AcknowledgeDataCollection acknowledgeDataCollection) {
@@ -101,8 +95,8 @@ public class AccidentPollingService extends Service {
 		
 		ApplicationNotificationParameter param 
 			= new ApplicationNotificationParameter(this,
-				"Mission Report Result", 
-				"Mission Report Result", 
+				"Pending Mission Report Result", 
+				"Pending Mission Report Result", 
 				message, 
 				"",
 				contentIntent, 
@@ -110,12 +104,22 @@ public class AccidentPollingService extends Service {
 		ApplicationNotification.sendNotification(param);
 	}
 	
+	private void processReceivedData(AccidentPollingData accidentPollingData) {
+		// TODO Logic to check wether to send and set state = pending for incoming accident or not?
+		reportPendingState(accidentPollingData);
+		notifyIncomingAccident(accidentPollingData);
+		sendLocalBroadCast(accidentPollingData);
+	}
+	
+	
+	
 	private void reportPendingState(AccidentPollingData accidentPollingData) {
 		AccidentData accidentData = accidentPollingData.getAccidentData();
 		MissionReport pending = new MissionReport(
 				pollAccidentRequestData.getImei(),
 				accidentData.getAccidentID(), 
 				RescueState.PENDING, 
+				accidentPollingData.getAssignDate(),
 				ApplicationTime.newDateInstance(), 
 				RescueState.DEFAULT_MESSAGE);
 		
