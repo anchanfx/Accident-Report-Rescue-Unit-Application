@@ -27,14 +27,14 @@ public class TCP_IP implements IServerConnector {
 	}
 
 	@Override
-	public AccidentData pollAccident(AccidentPollingData pollAccidentData) throws ApplicationException {
-		JSONObject jsonObject = AccidentPolllingDataConverter.toJSON(pollAccidentData);
+	public AccidentPollingData pollAccident(AccidentPollingRequestData pollAccidentData) throws ApplicationException {
+		JSONObject jsonObject = AccidentPolllingRequestDataConverter.toJSON(pollAccidentData);
 		HttpResponse httpResponse = jsonRequest(POLL_ACCIDENT_URL, jsonObject);
 		JSONObject jsonObject_AccidentData = httpResponse_to_JSONObject(httpResponse);
 
-		AccidentData accidentData = AccidentDataConverter.fromJSON(jsonObject_AccidentData);
+		AccidentPollingData accidentPollingData = AccidentPollingDataConverter.fromJSON(jsonObject_AccidentData);
 		
-		return accidentData;
+		return accidentPollingData;
 	}
 
 	@Override

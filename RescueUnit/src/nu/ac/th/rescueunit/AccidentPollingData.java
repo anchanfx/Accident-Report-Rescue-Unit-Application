@@ -1,19 +1,30 @@
 package nu.ac.th.rescueunit;
 
+import java.util.Date;
 
 public class AccidentPollingData {
-	String imei;
-
-	public AccidentPollingData(String imei) {
+	private AccidentData accidentData;
+	private Date assignDate;
+	
+	public AccidentPollingData(AccidentData accidentData, Date assignDateTime) {
 		super();
-		this.imei = imei;
+		this.accidentData = accidentData;
+		this.assignDate = assignDateTime;
 	}
 
-	public String getImei() {
-		return imei;
+	public AccidentData getAccidentData() {
+		return accidentData;
 	}
 
-	public void setImei(String imei) {
-		this.imei = imei;
+	public void setAccidentData(AccidentData accidentData) {
+		this.accidentData = accidentData;
+	}
+
+	public Date getAssignDate() {
+		return assignDate;
+	}
+
+	public void setAssignDate(Date assignDateTime) {
+		this.assignDate = assignDateTime;
 	}
 }

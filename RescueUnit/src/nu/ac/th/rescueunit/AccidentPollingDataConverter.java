@@ -9,14 +9,18 @@ import java.util.TimeZone;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class AccidentDataConverter {
+import android.util.Log;
+
+public class AccidentPollingDataConverter {
 	
-	public static AccidentData fromJSON(JSONObject jsonObject) throws ApplicationException {
+	public static AccidentPollingData fromJSON(JSONObject jsonObject) throws ApplicationException {
+		AccidentPollingData accidentPollingData = null;
 		AccidentData accidentData = null;
 		Position position = null;
 		AdditionalInfo additionalInfo = null;
-		int accidentID = 0;
 		Date date = null;
+		Date serverDate = null;
+		Date assignDate = null;
 		
 		try {	
 			JSONObject jsonObject_AccidentData = 
@@ -29,13 +33,22 @@ public class AccidentDataConverter {
 			
 			boolean trafficBlocked = booleanInPhpToJava(
 					jsonObject_AdditionalInfo.getInt(JSONKeys.TRAFFIC_BLOCKED));
+			boolean resolve = booleanInPhpToJava(
+					jsonObject_AccidentData.getInt(JSONKeys.RESOLVE));
+			
 			Long timeStamp = timeStampInPhpToJava(
 					jsonObject_AccidentData.getLong(JSONKeys.DATE_TIME));
+			Long serverTimeStamp = timeStampInPhpToJava(
+					jsonObject_AccidentData.getLong(JSONKeys.SERVER_DATE_TIME));
+			Long assignTimeStamp = timeStampInPhpToJava(
+					jsonObject.getLong(JSONKeys.ASSIGN_DATE_TIME));
 			
-			accidentID = jsonObject_AccidentData.getInt(JSONKeys.ACCIDENT_ID);
+			int accidentID = jsonObject_AccidentData.getInt(JSONKeys.ACCIDENT_ID);
+			
 			position = new Position(
 					jsonObject_Position.getDouble(JSONKeys.LATITUDE),
 					jsonObject_Position.getDouble(JSONKeys.LONGITUDE));
+			
 			additionalInfo = new AdditionalInfo(
 					jsonObject_AdditionalInfo.getString(JSONKeys.ACCIDENT_TYPE),
 					jsonObject_AdditionalInfo.getInt(JSONKeys.AMOUNT_OF_INJURED),
@@ -44,14 +57,17 @@ public class AccidentDataConverter {
 					jsonObject_AdditionalInfo.getString(JSONKeys.MESSAGE));
 			
 			date = ApplicationTime.constructDate(timeStamp);
+			serverDate = ApplicationTime.constructDate(serverTimeStamp);
+			assignDate = ApplicationTime.constructDate(assignTimeStamp);
+			
+			accidentData = new AccidentData(accidentID, position, additionalInfo, date, serverDate, resolve);
+			accidentPollingData = new AccidentPollingData(accidentData, assignDate);
 		} catch (JSONException e) {
 			throw new ApplicationException();
 		} catch (NullPointerException e) {
 			throw new ApplicationException();
 		}
 		
-		accidentData = new AccidentData(accidentID, position, additionalInfo, date);
-		
-		return accidentData;
+		return accidentPollingData;
 	}
 }

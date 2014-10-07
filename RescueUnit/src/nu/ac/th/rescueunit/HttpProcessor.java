@@ -58,22 +58,4 @@ public class HttpProcessor {
 			
 		return jsonObject;
 	}
-	
-	@Deprecated
-	public static HttpResponse postRequest(String URL, List<NameValuePair> nameValuePairs) {
-		HttpClient httpClient = new DefaultHttpClient();
-   	    HttpPost httpPost = new HttpPost(URL);
-   	    HttpResponse httpResponse = null;
-   	 
-   	    try {
-   	    	httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-   	    	httpResponse = httpClient.execute(httpPost);
-   	    } catch (ClientProtocolException e) {
-   	    	
-   	    } catch (IOException e) {
-   	    	
-   	    }
-   	    
-   	    return httpResponse;
-	}
 }
