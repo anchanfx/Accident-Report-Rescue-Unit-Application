@@ -1,17 +1,20 @@
 package nu.ac.th.rescueunit;
 
+import static nu.ac.th.rescueunit.ApplicationSettings.Notification.VIBRATE_PATTERN;
 import static nu.ac.th.rescueunit.NotificationID.INCOMING_ACCIDENT;
-import static nu.ac.th.rescueunit.ApplicationSettings.*;
+import static nu.ac.th.rescueunit.NotificationID.MISSION_REPORT;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.IBinder;
 import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 
 public class AccidentPollingService extends Service {
 	public static final String POLL_ACCIDENT_DATA = "POLL ACCIDENT DATA";
@@ -23,11 +26,11 @@ public class AccidentPollingService extends Service {
 	
 	private Thread thread;
 	private PollAccidentListener threadListener;
+	private BroadcastReceiver missionReportBroadcastReceiver;
 	
 	private Intent detailActivityIntent;
 	private PendingIntent detailActivityPendingIntent;
-	private Intent acceptMissionIntent;
-	private PendingIntent acceptMissionPendingIntent;
+	private Intent pendingReportIntent;
 	
 	private NotificationManager notificationManager;
 	private long[] notificationVibratePattern;
@@ -43,19 +46,17 @@ public class AccidentPollingService extends Service {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		pollAccidentRequestData = new AccidentPollingRequestData("1");
+		pollAccidentRequestData = new AccidentPollingRequestData("2");
 						 //= new AccidentPollingData(IMEI.getDeviceIMEI(this));
 		notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-		notificationVibratePattern = NOTIFICATION_VIBRATE_PATTERN;
+		notificationVibratePattern = VIBRATE_PATTERN;
 		broadcaster = LocalBroadcastManager.getInstance(this);
-		threadListener = new PollAccidentListener() {
-			@Override
-			public void onDataReceived(AccidentPollingData accidentPollingData) {
-				processReceivedData(accidentPollingData);
-			}
-		};
+		createAnoymouseInnerType();
+		LocalBroadcastManager.getInstance(this)
+			.registerReceiver((missionReportBroadcastReceiver),
+					new IntentFilter(MissionReportService.BROADCAST));
 	}
-
+	
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		thread = new Thread(new PollAccident(
@@ -64,54 +65,85 @@ public class AccidentPollingService extends Service {
 		return START_STICKY;
 	}
 
+	private void createAnoymouseInnerType() {
+		threadListener = new PollAccidentListener() {
+			@Override
+			public void onDataReceived(AccidentPollingData accidentPollingData) {
+				processReceivedData(accidentPollingData);
+			}
+		};
+		
+		missionReportBroadcastReceiver = new BroadcastReceiver() {
+			
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				AcknowledgeDataCollection acknowledgeDataCollection = 
+						(AcknowledgeDataCollection)intent
+						.getSerializableExtra(MissionReportService.ACKNOWLEDGE_DATA_COLLECTION);
+				processReportAcknowledge(acknowledgeDataCollection);
+			}
+		};
+	}
+	
 	private void processReceivedData(AccidentPollingData accidentPollingData) {
-		prepareIntents(accidentPollingData);
-		sendNotification(accidentPollingData);
+		reportPendingState(accidentPollingData);
+		notifyIncomingAccident(accidentPollingData);
 		sendLocalBroadCast(accidentPollingData);
 	}
 	
-	private void prepareIntents(AccidentPollingData accidentPollingData) {
+	private void processReportAcknowledge(AcknowledgeDataCollection acknowledgeDataCollection) {
+		PendingIntent contentIntent = PendingIntent.getActivity(
+			    getApplicationContext(),
+			    0,
+			    new Intent(),
+			    PendingIntent.FLAG_UPDATE_CURRENT);
+		String message = acknowledgeDataCollection.getAcknowledgeInfo().getMessage();
+		
+		ApplicationNotificationParameter param 
+			= new ApplicationNotificationParameter(this,
+				"Mission Report Result", 
+				"Mission Report Result", 
+				message, 
+				"",
+				contentIntent, 
+				MISSION_REPORT);
+		ApplicationNotification.sendNotification(param);
+	}
+	
+	private void reportPendingState(AccidentPollingData accidentPollingData) {
 		AccidentData accidentData = accidentPollingData.getAccidentData();
+		MissionReport pending = new MissionReport(
+				pollAccidentRequestData.getImei(),
+				accidentData.getAccidentID(), 
+				RescueState.PENDING, 
+				ApplicationTime.newDateInstance(), 
+				RescueState.DEFAULT_MESSAGE);
 		
-		MissionReport accept = new MissionReport(pollAccidentRequestData.getImei(),
-				accidentData.getAccidentID(), RescueState.ACCEPT, ApplicationTime.newDateInstance(), "");
-		
+		pendingReportIntent = new Intent(this, MissionReportService.class);
+		pendingReportIntent.putExtra(MissionReportService.MISSION_REPORT_DATA, pending);
+		startService(pendingReportIntent);
+	}
+	
+	private void notifyIncomingAccident(AccidentPollingData accidentPollingData) {
+		AccidentData accidentData = accidentPollingData.getAccidentData();
 		detailActivityIntent = new Intent(this, DetailActivity.class);
 		detailActivityIntent.putExtra(DetailActivity.ACCIDENT_DATA, accidentData);
 		detailActivityPendingIntent = PendingIntent.getActivity(this, 0, detailActivityIntent, 0);
 		
-		acceptMissionIntent = new Intent(this, MissionReportService.class);
-		acceptMissionIntent.putExtra(MissionReportService.MISSION_REPORT_DATA, accept);
-		acceptMissionPendingIntent = PendingIntent.getService(this, 0, acceptMissionIntent, 0);
-	}
-	
-	private void sendNotification(AccidentPollingData accidentPollingData) {
-		AccidentData accidentData = accidentPollingData.getAccidentData();
-		
-		
 		Position position = accidentData.getPosition();
 		AdditionalInfo additionalInfo = accidentData.getAdditionalInfo();
 		
-		Notification noti = new NotificationCompat.Builder(this)
-			.setSmallIcon(R.drawable.ic_launcher)
-			.setTicker("Incoming Accident!")
-			.setContentTitle("Callcenter wants you!")
-			.setContentText(accidentPollingData.getAssignDate().toString())
-			.setContentIntent(detailActivityPendingIntent)
-			/** Begin Area : Need API 4.1 or higer to work! **/
-			.setStyle(new NotificationCompat.BigTextStyle()
-				.bigText(accidentData.getAccidentID() + "\n" +
+		ApplicationNotificationParameter param
+			= new ApplicationNotificationParameter(this,
+					"Incoming Accident!", 
+					"Callcenter wants you!", 
+					"AT=" + accidentPollingData.getAssignDate().toString(), 
+					accidentData.getAccidentID() + "\n" +
 							position.toString() + "\n" + 
-							additionalInfo.toString()))
-			.addAction(R.drawable.ic_launcher,"Accept", acceptMissionPendingIntent)
-            .addAction(R.drawable.ic_launcher,"Reject", detailActivityPendingIntent)
-            /** End Area : Need API 4.1 or higer to work! **/
-		    .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
-	    	.setVibrate(notificationVibratePattern)
-	    	.setAutoCancel(true)
-	        .build();
-	   
-	   notificationManager.notify(INCOMING_ACCIDENT, noti);
+							additionalInfo.toString(),
+					detailActivityPendingIntent, 
+					INCOMING_ACCIDENT);
+		ApplicationNotification.sendNotification(param);
 	}
 	
 	private void sendLocalBroadCast(AccidentPollingData accidentPollingData) {

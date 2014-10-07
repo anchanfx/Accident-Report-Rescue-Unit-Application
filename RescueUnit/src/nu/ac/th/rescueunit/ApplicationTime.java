@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.TimeZone;
 
 public class ApplicationTime {
-	public static final String TIME_ZONE = "UTC";
+	public static final String TIME_ZONE = "Asia/Bangkok";
 	
 	public static Date newDateInstance() {
 		TimeZone.setDefault(TimeZone.getTimeZone(TIME_ZONE));
