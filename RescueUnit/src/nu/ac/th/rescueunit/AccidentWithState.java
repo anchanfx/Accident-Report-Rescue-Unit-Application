@@ -5,10 +5,10 @@ public class AccidentWithState {
 	private AccidentRescueState rescueState;
 	
 	public AccidentWithState(AccidentData accidentData,
-			AccidentRescueState rescueState) {
+			AccidentRescueState accidentRescueState) {
 		super();
 		this.accidentData = accidentData;
-		this.rescueState = rescueState;
+		this.rescueState = accidentRescueState;
 	}
 	
 	public AccidentData getAccidentData() {
@@ -17,10 +17,10 @@ public class AccidentWithState {
 	public void setAccidentData(AccidentData accidentData) {
 		this.accidentData = accidentData;
 	}
-	public AccidentRescueState getRescueState() {
+	public AccidentRescueState getAccidentRescueState() {
 		return rescueState;
 	}
-	public void setRescueState(AccidentRescueState rescueState) {
-		this.rescueState = rescueState;
+	public void setAccidentRescueState(AccidentRescueState accidentRescueState) {
+		this.rescueState = accidentRescueState;
 	}
 }

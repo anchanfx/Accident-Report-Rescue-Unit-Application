@@ -4,17 +4,17 @@ import java.util.Date;
 
 public class AccidentRescueState {
 	private Date assignDateTime;
-	private Date unitDateTime;
+	private Date dateTime;
 	private int state;
 	
 	public AccidentRescueState() {
 		this(null, null, RescueState.PENDING);
 	}
 	
-	public AccidentRescueState(Date assignDateTime, Date unitDateTime, int state) {
+	public AccidentRescueState(Date assignDateTime, Date dateTime, int state) {
 		super();
 		this.assignDateTime = assignDateTime;
-		this.unitDateTime = unitDateTime;
+		this.dateTime = dateTime;
 		this.state = state;
 	}
 
@@ -26,12 +26,12 @@ public class AccidentRescueState {
 		this.assignDateTime = assignDateTime;
 	}
 
-	public Date getUnitDateTime() {
-		return unitDateTime;
+	public Date getDateTime() {
+		return dateTime;
 	}
 
-	public void setUnitDateTime(Date unitDateTime) {
-		this.unitDateTime = unitDateTime;
+	public void setDateTime(Date dateTime) {
+		this.dateTime = dateTime;
 	}
 
 	public int getState() {

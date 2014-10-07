@@ -33,14 +33,12 @@ public class MissionReportService extends IntentService {
 		
 		try {
 			acknowledgeDataCollection = connector.reportMission(missionReport);
-			notifyUser(acknowledgeDataCollection);
+			sendLocalBroadCast(acknowledgeDataCollection);
 		} catch (ApplicationException e) {
 			// report fail, do something?
 		}
-	}
-	
-	private void notifyUser(AcknowledgeDataCollection acknowledgeDataCollection) {
-		sendLocalBroadCast(acknowledgeDataCollection);
+		
+		stopSelf();
 	}
 	
 	private void sendLocalBroadCast(AcknowledgeDataCollection acknowledgeDataCollection) {

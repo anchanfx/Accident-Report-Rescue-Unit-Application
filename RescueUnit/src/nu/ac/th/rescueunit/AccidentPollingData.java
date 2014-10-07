@@ -1,8 +1,13 @@
 package nu.ac.th.rescueunit;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class AccidentPollingData {
+public class AccidentPollingData implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1911415988419421898L;
 	private AccidentData accidentData;
 	private Date assignDate;
 	

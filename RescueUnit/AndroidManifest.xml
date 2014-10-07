@@ -30,6 +30,7 @@
         
         <service android:name=".AccidentPollingService"></service>
         <service android:name=".MissionReportService"></service>
+        <service android:name=".ProcessIncomingAccidentService"></service>
         
          <receiver android:name=".AccidentPollingService_BroadcastReceiver" >  
 		    <intent-filter >  
