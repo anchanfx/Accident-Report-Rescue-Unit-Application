@@ -3,9 +3,9 @@ package nu.ac.th.rescueunit;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class AccidentPolllingDataConverter {
+public class AccidentPolllingRequestDataConverter {
 
-	public static JSONObject toJSON(AccidentPollingData accidentPollingData) throws ApplicationException {
+	public static JSONObject toJSON(AccidentPollingRequestData accidentPollingData) throws ApplicationException {
 		JSONObject holder = new JSONObject();
 		try {
 			/*IMEI*/

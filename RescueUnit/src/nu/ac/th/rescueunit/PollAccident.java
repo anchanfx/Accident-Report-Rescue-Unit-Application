@@ -7,26 +7,26 @@ import android.util.Log;
 public class PollAccident implements Runnable {
 	private PollAccidentListener listener;
 	private int pollingInterval;
-	private AccidentPollingData pollAccidentData;
+	private AccidentPollingRequestData pollRequestData;
 	private IServerConnector connector;
 	
 	public PollAccident(PollAccidentListener listener, int pollingInterval, 
-			AccidentPollingData pollAccidentData, IServerConnector connector) {
+			AccidentPollingRequestData pollAccidentData, IServerConnector connector) {
 		super();
 		this.listener = listener;
 		this.pollingInterval = pollingInterval;
-		this.pollAccidentData = pollAccidentData;
+		this.pollRequestData = pollAccidentData;
 		this.connector = connector;
 	}
 
 	@Override
 	public void run() {
-		AccidentData data = null;
+		AccidentPollingData data = null;
 		
 		while(true) {
 			try {
 				try {
-					data = connector.pollAccident(pollAccidentData);
+					data = connector.pollAccident(pollRequestData);
 					listener.onDataReceived(data);
 				} catch (ApplicationException e) {
 					// NO CONNECTION, NO RESPOND, EMPTY RESPOND?

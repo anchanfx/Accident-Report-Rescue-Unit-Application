@@ -1,19 +1,35 @@
 package nu.ac.th.rescueunit;
 
+import java.io.Serializable;
+import java.util.Date;
 
-public class AccidentPollingData {
-	String imei;
-
-	public AccidentPollingData(String imei) {
+public class AccidentPollingData implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1911415988419421898L;
+	private AccidentData accidentData;
+	private Date assignDate;
+	
+	public AccidentPollingData(AccidentData accidentData, Date assignDateTime) {
 		super();
-		this.imei = imei;
+		this.accidentData = accidentData;
+		this.assignDate = assignDateTime;
 	}
 
-	public String getImei() {
-		return imei;
+	public AccidentData getAccidentData() {
+		return accidentData;
 	}
 
-	public void setImei(String imei) {
-		this.imei = imei;
+	public void setAccidentData(AccidentData accidentData) {
+		this.accidentData = accidentData;
+	}
+
+	public Date getAssignDate() {
+		return assignDate;
+	}
+
+	public void setAssignDate(Date assignDateTime) {
+		this.assignDate = assignDateTime;
 	}
 }

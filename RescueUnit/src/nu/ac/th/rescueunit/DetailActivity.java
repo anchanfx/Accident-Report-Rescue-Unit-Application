@@ -1,5 +1,8 @@
 package nu.ac.th.rescueunit;
 
+import java.util.Date;
+import java.util.TimeZone;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -62,8 +65,10 @@ public class DetailActivity extends Activity{
 		try {
 			Position position = accidentData.getPosition();
 			AdditionalInfo additionalInfo = accidentData.getAdditionalInfo();
+			Date dateTime = accidentData.getDateTime();
 			
 			txtViewDate = (TextView)findViewById(R.id.txt_show_datetime);
+			txtViewDate.setText(dateTime.toString());
 			
 			txtViewLongitude = (TextView)findViewById(R.id.txt_show_longitude);
 			txtViewLongitude.setText(String.valueOf(position.getLongitude()));

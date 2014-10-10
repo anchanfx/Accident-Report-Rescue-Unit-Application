@@ -1,20 +1,11 @@
 package nu.ac.th.rescueunit;
 
-import static nu.ac.th.rescueunit.NotificationID.INCOMING_ACCIDENT;
-import static nu.ac.th.rescueunit.ApplicationSettings.*;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
-import android.provider.Settings;
-import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 
 public class AccidentPollingService extends Service {
-	public static final String POLL_ACCIDENT_DATA = "POLL ACCIDENT DATA";
 	public static final String BROADCAST 
 		= "nu.ac.th.rescueunit.AccidentPollingService.BROADCAST";
 	public static final String MESSAGE = "MESSAGE";
@@ -23,17 +14,11 @@ public class AccidentPollingService extends Service {
 	
 	private Thread thread;
 	private PollAccidentListener threadListener;
-	
-	private Intent detailActivityIntent;
-	private PendingIntent detailActivityPendingIntent;
-	private Intent acceptMissionIntent;
-	private PendingIntent acceptMissionPendingIntent;
-	
-	private NotificationManager notificationManager;
-	private long[] notificationVibratePattern;
 	private LocalBroadcastManager broadcaster;
 	
-	private AccidentPollingData pollAccidentData;
+	private Intent processAccidentIntent;
+	
+	private AccidentPollingRequestData accidentPollingRequestData;
 	
 	@Override
 	public IBinder onBind(Intent arg0) {
@@ -43,73 +28,38 @@ public class AccidentPollingService extends Service {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		pollAccidentData = new AccidentPollingData("1");
+		accidentPollingRequestData = new AccidentPollingRequestData("2");
 						 //= new AccidentPollingData(IMEI.getDeviceIMEI(this));
-		notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-		notificationVibratePattern = NOTIFICATION_VIBRATE_PATTERN;
 		broadcaster = LocalBroadcastManager.getInstance(this);
 		threadListener = new PollAccidentListener() {
 			@Override
-			public void onDataReceived(AccidentData accidentData) {
-				processReceivedData(accidentData);
+			public void onDataReceived(AccidentPollingData accidentPollingData) {
+				processReceivedData(accidentPollingData);
 			}
 		};
 	}
-
+	
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		thread = new Thread(new PollAccident(
-				threadListener, POLLING_INTERVAL, pollAccidentData, new TCP_IP()));
+				threadListener, POLLING_INTERVAL, accidentPollingRequestData, new TCP_IP()));
 		thread.start();
 		return START_STICKY;
 	}
-
-	private void processReceivedData(AccidentData accidentData) {
-		prepareIntents(accidentData);
-		sendNotification(accidentData);
-		sendLocalBroadCast(accidentData);
+	
+	private void processReceivedData(AccidentPollingData accidentPollingData) {
+		processAccidentIntent = new Intent(this, ProcessIncomingAccidentService.class);
+		processAccidentIntent.putExtra(
+				ProcessIncomingAccidentService.ACCIDENT_POLLING_DATA, 
+				accidentPollingData);
+		processAccidentIntent.putExtra(
+				ProcessIncomingAccidentService.ACCIDENT_POLLING_REQUEST_DATA, 
+				accidentPollingRequestData);
+		
+		startService(processAccidentIntent);
 	}
 	
-	private void prepareIntents(AccidentData accidentData) {
-		MissionReport accept = new MissionReport(pollAccidentData.getImei(),
-				accidentData.getAccidentID(), RescueState.ACCEPT, "");
-		
-		detailActivityIntent = new Intent(this, DetailActivity.class);
-		detailActivityIntent.putExtra(DetailActivity.ACCIDENT_DATA, accidentData);
-		detailActivityPendingIntent = PendingIntent.getActivity(this, 0, detailActivityIntent, 0);
-		
-		acceptMissionIntent = new Intent(this, MissionReportService.class);
-		acceptMissionIntent.putExtra(MissionReportService.MISSION_REPORT_DATA, accept);
-		acceptMissionPendingIntent = PendingIntent.getService(this, 0, acceptMissionIntent, 0);
-	}
-	
-	private void sendNotification(AccidentData accidentData) {
-		Position position = accidentData.getPosition();
-		AdditionalInfo additionalInfo = accidentData.getAdditionalInfo();
-		
-		Notification noti = new NotificationCompat.Builder(this)
-			.setSmallIcon(R.drawable.ic_launcher)
-			.setTicker("Incoming Accident!")
-			.setContentTitle("Callcenter wants you!")
-			.setContentText(position.toString())
-			.setContentIntent(detailActivityPendingIntent)
-			/** Begin Area : Need API 4.1 or higer to work! **/
-			.setStyle(new NotificationCompat.BigTextStyle()
-				.bigText(accidentData.getAccidentID() + "\n" +
-							position.toString() + "\n" + 
-							additionalInfo.toString()))
-			.addAction(R.drawable.ic_launcher,"Accept", acceptMissionPendingIntent)
-            .addAction(R.drawable.ic_launcher,"Reject", detailActivityPendingIntent)
-            /** End Area : Need API 4.1 or higer to work! **/
-		    .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
-	    	.setVibrate(notificationVibratePattern)
-	    	.setAutoCancel(true)
-	        .build();
-	   
-	   notificationManager.notify(INCOMING_ACCIDENT, noti);
-	}
-	
-	private void sendLocalBroadCast(AccidentData accidentData) {
+	private void sendLocalBroadCast() {
 		Intent intent = new Intent(BROADCAST);
 	    intent.putExtra(MESSAGE, "");
 	    broadcaster.sendBroadcast(intent);

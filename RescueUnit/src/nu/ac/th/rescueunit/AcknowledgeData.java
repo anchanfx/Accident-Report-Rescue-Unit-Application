@@ -1,6 +1,12 @@
 package nu.ac.th.rescueunit;
 
-public class AcknowledgeData {
+import java.io.Serializable;
+
+public class AcknowledgeData implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4120448741157992980L;
 	private String message;
 
 	
