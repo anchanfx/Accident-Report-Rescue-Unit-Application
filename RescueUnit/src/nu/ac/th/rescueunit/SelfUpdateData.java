@@ -3,13 +3,13 @@ package nu.ac.th.rescueunit;
 public class SelfUpdateData {
 	private Position mPosition;
 	private RescueUnitStatus mStatus;
-	private IMEI mImei;
+	private String mImei;
 	
 	public SelfUpdateData() {
-		this(new Position(), new RescueUnitStatus(),new IMEI());
+		this(new Position(), new RescueUnitStatus(), "");
 	}
 
-	public SelfUpdateData(Position position, RescueUnitStatus rescueStatus, IMEI imei) {
+	public SelfUpdateData(Position position, RescueUnitStatus rescueStatus, String imei) {
 		super();
 		mPosition = position;
 		mStatus = rescueStatus;
@@ -31,12 +31,14 @@ public class SelfUpdateData {
 	public void setStatus(RescueUnitStatus status) {
 		mStatus = status;
 	}
-	
-	public IMEI getImei(){
+
+	public String getImei() {
 		return mImei;
 	}
-	
-	public void setImei(IMEI imei){
+
+	public void setImei(String imei) {
 		mImei = imei;
 	}
+
+	
 }	

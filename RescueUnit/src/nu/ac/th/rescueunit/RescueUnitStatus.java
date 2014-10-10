@@ -1,23 +1,23 @@
 package nu.ac.th.rescueunit;
 
 public class RescueUnitStatus {
-	private static final String Status = "UNKNOWN";
+	private static final boolean Status = false;
 	
-	private String rStatus;
+	private boolean rStatus;
 	
 	public RescueUnitStatus(){
 		this(Status);
 	}
 	
-	public RescueUnitStatus(String status) {
+	public RescueUnitStatus(Boolean status) {
 		this.rStatus = status;
 	}
 	
-	public String getStatus(){
+	public boolean getStatus(){
 		return rStatus;
 	}
 	
-	public void setStatus(String status){
+	public void setStatus(Boolean status){
 		rStatus = status;
 	}
 }

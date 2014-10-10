@@ -15,7 +15,7 @@ public class TCP_IP implements IServerConnector {
 	
 	@Override
 	public AcknowledgeDataCollection updateRescueUnit(ReportDataCollection reportDataCollection) throws ApplicationException {
-		JSONObject jsonObject = ReportDataCollectionConverter.toJSON(reportDataCollection);
+		JSONObject jsonObject = SelfUpdateConverter.toJSON(reportDataCollection);
 		HttpResponse httpResponse = jsonRequest(UPDATE_RESCUEUNIT_URL, jsonObject);
 		
 		JSONObject jsonObject_AcknowledgeDataCollection = httpResponse_to_JSONObject(httpResponse);

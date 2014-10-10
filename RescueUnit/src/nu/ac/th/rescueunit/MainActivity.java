@@ -2,6 +2,8 @@ package nu.ac.th.rescueunit;
 
 import static nu.ac.th.rescueunit.ServiceUtility.isMyServiceRunning;
 
+import java.util.TimeZone;
+
 import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.content.Intent;
@@ -64,6 +66,13 @@ public class MainActivity extends Activity {
 			{
 				Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
 				startActivity(intent);
+			}
+		});
+		
+		final Button btnTestSend = (Button)findViewById(R.id.btn_test_send);
+		btnTestSend.setOnClickListener(new Button.OnClickListener(){
+			public void onClick(View v){
+				
 			}
 		});
 	}

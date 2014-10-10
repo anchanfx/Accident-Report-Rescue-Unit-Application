@@ -8,7 +8,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class ReportDataCollectionConverter {
+public class SelfUpdateConverter {
 	
 	/* Doesn't convert Date into JSON Object because of using server time instead
 	 * So Date is not sent to server
@@ -37,7 +37,7 @@ public class ReportDataCollectionConverter {
 					rescuData.getStatus().getStatus());
 			/*IMEI*/
 			jsonObject_Imei.put(JSONKeys.IMEI, 
-					rescuData.getImei().getImei());
+					rescuData.getImei());
 			
 			/*Date*/
 			//jsonObject_Date.put(JSONKeys.TIME, date.getTime());
@@ -73,7 +73,7 @@ public class ReportDataCollectionConverter {
 		//IMEI
 		nameValuePairs.add(
 				new BasicNameValuePair(JSONKeys.IMEI, 
-						String.valueOf(rescueReportData.getImei().getImei())));
+						String.valueOf(rescueReportData.getImei())));
 
 		
 
