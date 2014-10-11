@@ -13,7 +13,7 @@ public class SelfUpdateConverter {
 	/* Doesn't convert Date into JSON Object because of using server time instead
 	 * So Date is not sent to server
 	 */
-	public static JSONObject toJSON(ReportDataCollection reportDataCollection) {
+	public static JSONObject toJSON(SelfDataCollection reportDataCollection) {
 		JSONObject holder = new JSONObject();
 			JSONObject jsonObject_RescueData = new JSONObject();
 				JSONObject jsonObject_Position = new JSONObject();
@@ -54,7 +54,7 @@ public class SelfUpdateConverter {
 	}
 	
 	@Deprecated
-	public static List<NameValuePair> toNameValuePairs(ReportDataCollection reportDataCollection) {
+	public static List<NameValuePair> toNameValuePairs(SelfDataCollection reportDataCollection) {
 		List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 		SelfUpdateData rescueReportData = reportDataCollection.getRescuData();
 		

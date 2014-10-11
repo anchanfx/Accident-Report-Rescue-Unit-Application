@@ -2,22 +2,20 @@ package nu.ac.th.rescueunit;
 
 import java.util.Date;
 
-public class ReportDataCollection {
+public class SelfDataCollection {
 	private SelfUpdateData mRescuData;
-	private Date mDate;
 	
-	public ReportDataCollection() {
+	public SelfDataCollection() {
 		this(new SelfUpdateData(), new Date());
 	}
 	
-	public ReportDataCollection(SelfUpdateData rescuData) {
+	public SelfDataCollection(SelfUpdateData rescuData) {
 		this(rescuData, new Date());
 	}
 
-	public ReportDataCollection(SelfUpdateData rescuData, Date date) {
+	public SelfDataCollection(SelfUpdateData rescuData, Date date) {
 		super();
 		mRescuData = rescuData;
-		mDate = date;
 	}
 
 	public SelfUpdateData getRescuData() {
@@ -26,13 +24,5 @@ public class ReportDataCollection {
 
 	public void setAccidentData(SelfUpdateData rescuData) {
 		mRescuData = rescuData;
-	}
-
-	public Date getDate() {
-		return mDate;
-	}
-
-	public void setDate(Date date) {
-		this.mDate = date;
 	}
 }
