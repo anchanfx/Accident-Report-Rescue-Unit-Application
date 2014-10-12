@@ -20,7 +20,8 @@ public class JSONKeys {
 	public static final String DATE_TIME 			= "DateTime";
 	public static final String SERVER_DATE_TIME 	= "ServerDateTime";
 	public static final String RESOLVE 				= "Resolve";
-	public static final String STATUS 				= "Status";
+	public static final String STATUS_ONLINE 		= "StatusOnline";
+	public static final String STATUS_AVAILABLE		= "StatusAvailable";
 	public static final String IMEI 				= "IMEI";
 	public static final String RESCUE_STATE 		= "RescueState";
 	public static final String ASSIGN_DATE_TIME		= "AssignDateTime";

@@ -33,8 +33,10 @@ public class SelfUpdateConverter {
 					rescuData.getPosition().getLongitude());
 			
 			/*RescueStatus*/
-			jsonObject_RescueStatus.put(JSONKeys.STATUS, 
-					rescuData.getStatus().getStatus());
+			jsonObject_RescueStatus.put(JSONKeys.STATUS_ONLINE, 
+					rescuData.getStatus().getOnline());
+			jsonObject_RescueStatus.put(JSONKeys.STATUS_AVAILABLE, 
+					rescuData.getStatus().getAvailable());
 			/*IMEI*/
 			jsonObject_Imei.put(JSONKeys.IMEI, 
 					rescuData.getImei());
@@ -68,8 +70,11 @@ public class SelfUpdateConverter {
 						String.valueOf(rescueReportData.getPosition().getLongitude())));
 		// RescueStatus
 		nameValuePairs.add(
-				new BasicNameValuePair(JSONKeys.STATUS, 
-						String.valueOf(rescueReportData.getStatus().getStatus())));
+				new BasicNameValuePair(JSONKeys.STATUS_ONLINE, 
+						String.valueOf(rescueReportData.getStatus().getOnline())));
+		nameValuePairs.add(
+				new BasicNameValuePair(JSONKeys.STATUS_AVAILABLE, 
+						String.valueOf(rescueReportData.getStatus().getAvailable())));
 		//IMEI
 		nameValuePairs.add(
 				new BasicNameValuePair(JSONKeys.IMEI, 
