@@ -7,7 +7,7 @@ import android.os.IBinder;
 public class SelfUpdateService extends Service {
 	private Thread thread;
 	
-	public static String imei;
+	public String imei;
 	
 	@Override
 	public void onCreate() {

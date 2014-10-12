@@ -1,11 +1,11 @@
 package nu.ac.th.rescueunit;
 
 public class RescueUnitStatus {
-	private static boolean online;
-	private static boolean available;
+	private boolean online;
+	private boolean available;
 	
 	public RescueUnitStatus(){
-		this(online, available);
+		this(true, true);
 	}
 	
 	public RescueUnitStatus(boolean Online,boolean Available){
