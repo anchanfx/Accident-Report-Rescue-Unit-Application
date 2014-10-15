@@ -1,14 +1,19 @@
 package nu.ac.th.rescueunit;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class AccidentRescueState {
+public class AccidentRescueState implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6636004396212223399L;
 	private Date assignDateTime;
 	private Date dateTime;
 	private int state;
 	
 	public AccidentRescueState() {
-		this(null, null, RescueState.PENDING);
+		this(new Date(), new Date(), RescueState.PENDING);
 	}
 	
 	public AccidentRescueState(Date assignDateTime, Date dateTime, int state) {
@@ -40,5 +45,12 @@ public class AccidentRescueState {
 
 	public void setState(int state) {
 		this.state = state;
+	}
+	
+	@Override
+	public String toString() {
+		String str1 = "AssignDate : " + ApplicationTime.dateToString(this.assignDateTime) + "\n";
+		String str2 = "State : " + this.state;
+	    return  str1 + str2;
 	}
 }

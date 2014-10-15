@@ -140,7 +140,7 @@ public class ProcessIncomingAccidentService extends IntentService {
 		AccidentData accidentData = accidentWithState.getAccidentData();
 		AccidentRescueState accidentRescueState = accidentWithState.getAccidentRescueState();
 		detailActivityIntent = new Intent(this, DetailActivity.class);
-		detailActivityIntent.putExtra(DetailActivity.ACCIDENT_DATA, accidentData);
+		detailActivityIntent.putExtra(DetailActivity.ACCIDENT_WITH_STATE, accidentWithState);
 		detailActivityPendingIntent = PendingIntent.getActivity(this, 0, detailActivityIntent, 0);
 		
 		Position position = accidentData.getPosition();

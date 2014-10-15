@@ -16,7 +16,7 @@ public class AccidentData implements Serializable {
 	private boolean resolve;
 	
 	public AccidentData() {
-		this(0, new Position(), new AdditionalInfo(), new Date(), null, false);
+		this(0, new Position(), new AdditionalInfo(), new Date(), new Date(), false);
 	}
 
 	public AccidentData(int accidentID, Position position, AdditionalInfo additionalInfo,
@@ -76,5 +76,12 @@ public class AccidentData implements Serializable {
 
 	public void setResolve(boolean resolve) {
 		this.resolve = resolve;
+	}
+	
+	@Override
+	public String toString() {
+		String str1 = "ID: " + this.accidentID + "\n";
+		String str2 = "ReportTime: " + ApplicationTime.dateToString(this.dateTime);
+	    return str1 + str2;
 	}
 }	

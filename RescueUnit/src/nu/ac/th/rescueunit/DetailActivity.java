@@ -13,7 +13,7 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 public class DetailActivity extends Activity{
-	public static final String ACCIDENT_DATA = IntentExtraKeys.ACCIDENT_DATA;
+	public static final String ACCIDENT_WITH_STATE = IntentExtraKeys.ACCIDENT_WITH_STATE;
 	
 	// GUI
 	private TextView txtViewDate;
@@ -27,7 +27,9 @@ public class DetailActivity extends Activity{
 	private Button btnMap;
 	private OnClickListener btnMapListener;
 	
+	AccidentWithState accidentWithState;
 	AccidentData accidentData;
+	AccidentRescueState accidentRescueState;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +57,9 @@ public class DetailActivity extends Activity{
 	private void initializeVariables() {
 		Intent receivedIntent = getIntent();
 		try {
-			accidentData = (AccidentData)receivedIntent.getSerializableExtra(ACCIDENT_DATA);
+			accidentWithState = (AccidentWithState)receivedIntent.getSerializableExtra(ACCIDENT_WITH_STATE);
+			accidentData = accidentWithState.getAccidentData();
+			accidentRescueState = accidentWithState.getAccidentRescueState();
 		} catch (NullPointerException e) {
 			// NO DATA 
 		}
@@ -68,7 +72,7 @@ public class DetailActivity extends Activity{
 			Date dateTime = accidentData.getDateTime();
 			
 			txtViewDate = (TextView)findViewById(R.id.txt_show_datetime);
-			txtViewDate.setText(dateTime.toString());
+			txtViewDate.setText(ApplicationTime.dateToString(dateTime));
 			
 			txtViewLongitude = (TextView)findViewById(R.id.txt_show_longitude);
 			txtViewLongitude.setText(String.valueOf(position.getLongitude()));

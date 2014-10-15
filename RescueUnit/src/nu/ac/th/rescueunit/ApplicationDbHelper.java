@@ -1,11 +1,16 @@
 package nu.ac.th.rescueunit;
 
+import static nu.ac.th.rescueunit.Compatibility_PHP_JAVA.intToBoolean;
+
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import nu.ac.th.rescueunit.AccidentDataContract.AccidentDataScheme;
 import nu.ac.th.rescueunit.AccidentRescueStateContract.AccidentRescueStateScheme;
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -43,6 +48,15 @@ public class ApplicationDbHelper extends SQLiteOpenHelper {
 	private static final String SQL_DELETE_TABLE_ACCIDENT_RESCUE_STATE = 
 			"DROP TABLE IF EXISTS " + AccidentRescueStateScheme.TABLE_NAME;
 	
+	private static final String SQL_QUERY_ACCIDENT_WITH_SATE = 
+			"SELECT  *, MAX(" 
+						+ AccidentRescueStateScheme.TABLE_NAME + "." 
+						+ AccidentRescueStateScheme.COLUMN_DATE_TIME + ")" +
+					" FROM " + AccidentDataScheme.TABLE_NAME + 
+					" INNER JOIN " + AccidentRescueStateScheme.TABLE_NAME + 
+					" ON " + AccidentDataScheme.COLUMN_ID + "=" + AccidentRescueStateScheme.COLUMN_ACCIDENT_ID +
+					" GROUP BY " + AccidentDataScheme.COLUMN_ID;
+			
 	public ApplicationDbHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 	}
@@ -101,5 +115,40 @@ public class ApplicationDbHelper extends SQLiteOpenHelper {
 				assignDate.getTime());
 		
 		db.insertOrThrow(AccidentRescueStateScheme.TABLE_NAME, null, values);
+	}
+	
+	public void getAccidentData() {
+		
+	}
+	
+	public List<AccidentWithState> getAccidentWithState() {
+		SQLiteDatabase db = this.getReadableDatabase();
+		List<AccidentWithState> listOfAccidentWithStates = new ArrayList<AccidentWithState>();
+	    Cursor cursor = db.rawQuery(SQL_QUERY_ACCIDENT_WITH_SATE, null);
+	 
+	    if (cursor.moveToFirst()) {
+	        do {
+	        	AccidentData accidentData = new AccidentData();
+	        	AccidentRescueState accidentRescueState = new AccidentRescueState();
+	        	accidentData.setAccidentID(cursor.getInt(0));
+	        	accidentData.setPosition(new Position(cursor.getDouble(1), cursor.getDouble(2)));
+	        	accidentData.setAdditionalInfo(
+	        			new AdditionalInfo(cursor.getString(3), 
+	        							   cursor.getInt(4), 
+	        							   cursor.getInt(5), 
+	        							   intToBoolean(cursor.getInt(6)), 
+	        							   cursor.getString(7)));
+	        	accidentData.setDateTime(ApplicationTime.constructDate(cursor.getLong(8)));
+	        	accidentData.setServerDateTime(ApplicationTime.constructDate(cursor.getLong(9)));
+	        	accidentData.setResolve(intToBoolean(cursor.getInt(10)));
+	        	accidentRescueState.setAssignDateTime(ApplicationTime.constructDate(cursor.getLong(12)));
+	        	accidentRescueState.setState(cursor.getInt(13));
+	        	accidentRescueState.setDateTime(ApplicationTime.constructDate(cursor.getLong(14)));
+	            AccidentWithState accidentWithState = new AccidentWithState(accidentData, accidentRescueState);
+	            listOfAccidentWithStates.add(accidentWithState);
+	        } while (cursor.moveToNext());
+	    }
+		
+		return listOfAccidentWithStates;
 	}
 }

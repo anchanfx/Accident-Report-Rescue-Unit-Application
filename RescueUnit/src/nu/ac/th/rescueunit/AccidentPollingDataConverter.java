@@ -1,6 +1,6 @@
 package nu.ac.th.rescueunit;
 
-import static nu.ac.th.rescueunit.Compatibility_PHP_JAVA.booleanInPhpToJava;
+import static nu.ac.th.rescueunit.Compatibility_PHP_JAVA.intToBoolean;
 import static nu.ac.th.rescueunit.Compatibility_PHP_JAVA.timeStampInPhpToJava;
 
 import java.util.Date;
@@ -31,9 +31,9 @@ public class AccidentPollingDataConverter {
 					jsonObject_AccidentData.getJSONObject(JSONKeys.JSON_ADDITIONAL_INFO);
 			
 			
-			boolean trafficBlocked = booleanInPhpToJava(
+			boolean trafficBlocked = intToBoolean(
 					jsonObject_AdditionalInfo.getInt(JSONKeys.TRAFFIC_BLOCKED));
-			boolean resolve = booleanInPhpToJava(
+			boolean resolve = intToBoolean(
 					jsonObject_AccidentData.getInt(JSONKeys.RESOLVE));
 			
 			Long timeStamp = timeStampInPhpToJava(
