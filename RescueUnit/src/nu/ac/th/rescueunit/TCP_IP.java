@@ -14,8 +14,8 @@ public class TCP_IP implements IServerConnector {
 			"http://nuaccrepo.mywebcommunity.org/ReportServer/reportMission.php";
 	
 	@Override
-	public AcknowledgeDataCollection updateRescueUnit(SelfDataCollection selfDataCollection) throws ApplicationException {
-		JSONObject jsonObject = SelfUpdateConverter.toJSON(selfDataCollection);
+	public AcknowledgeDataCollection updateRescueUnit(SelfUpdateData selfUpdateData) throws ApplicationException {
+		JSONObject jsonObject = SelfUpdateConverter.toJSON(selfUpdateData);
 		HttpResponse httpResponse = jsonRequest(UPDATE_RESCUEUNIT_URL, jsonObject);
 		
 		JSONObject jsonObject_AcknowledgeDataCollection = httpResponse_to_JSONObject(httpResponse);

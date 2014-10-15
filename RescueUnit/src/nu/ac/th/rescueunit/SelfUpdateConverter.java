@@ -13,7 +13,7 @@ public class SelfUpdateConverter {
 	/* Doesn't convert Date into JSON Object because of using server time instead
 	 * So Date is not sent to server
 	 */
-	public static JSONObject toJSON(SelfDataCollection reportDataCollection) {
+	public static JSONObject toJSON(SelfUpdateData reportDataCollection) {
 		JSONObject holder = new JSONObject();
 			JSONObject jsonObject_RescueData = new JSONObject();
 				JSONObject jsonObject_Position = new JSONObject();
@@ -21,7 +21,7 @@ public class SelfUpdateConverter {
 				JSONObject jsonObject_Imei = new JSONObject();
 			//JSONObject jsonObject_Date = new JSONObject();
 		
-		SelfUpdateData rescuData = reportDataCollection.getRescuData();	
+		SelfUpdateData rescuData = reportDataCollection;	
 		//Date date = reportDataCollection.getDate();
 		
 		try {
