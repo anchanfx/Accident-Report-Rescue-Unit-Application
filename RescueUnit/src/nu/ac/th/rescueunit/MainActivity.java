@@ -13,7 +13,9 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.PopupWindow;
 
 public class MainActivity extends Activity {
@@ -26,6 +28,14 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		ListView list_view1;
+		final String page_name[] = {"Acci 1", "Acci 2", "Acci 3", "Acci 4", "Acci 5"};
+		list_view1 = (ListView)findViewById(R.id.listView1);
+		
+		ArrayAdapter<String> arr_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, page_name);
+		
+		list_view1.setAdapter(arr_adapter);
 		
 		final Button btnTest = (Button)findViewById(R.id.btn_test);
 		btnTest.setOnClickListener(new Button.OnClickListener(){
