@@ -43,7 +43,7 @@ public class DetailActivity extends Activity{
 		spin = (Spinner) findViewById(R.id.spinner_state_accident);
 		String[] obj = {"State 1", "State 2", "State 3"};
 		
-		ArrayAdapter adapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, obj);
+		ArrayAdapter adapter = new ArrayAdapter(getApplicationContext(), R.layout.menu_spinner, obj);
 		spin.setAdapter(adapter);
 		
 		createInterface();

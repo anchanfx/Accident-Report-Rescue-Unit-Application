@@ -42,48 +42,6 @@ public class MainActivity extends Activity {
 		AccidentListAdapter adapter = new AccidentListAdapter(this, listOfAccidentWithState);
 		listViewAccident.setAdapter(adapter);
 		
-		final Button btnTest = (Button)findViewById(R.id.btn_test);
-		btnTest.setOnClickListener(new Button.OnClickListener(){
-			@Override
-			public void onClick(View v){
-				
-				LayoutInflater inflater = (LayoutInflater)MainActivity
-						.this.getSystemService(LAYOUT_INFLATER_SERVICE);
-				View popupView = inflater.inflate(R.layout.popup_nonti, (ViewGroup)findViewById(R.id.layout_popup_nonti));
-				
-				final PopupWindow popupWindow = new PopupWindow(
-						popupView,
-						LayoutParams.WRAP_CONTENT,
-						LayoutParams.WRAP_CONTENT,
-						true);
-				popupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0);
-				
-				final Button btnOpen = (Button)popupView.findViewById(R.id.btn_opent_accident);
-				btnOpen.setOnClickListener(new Button.OnClickListener(){
-					
-					@Override
-					public void onClick(View v){
-						popupWindow.dismiss();
-						Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
-						startActivity(intent);
-						
-					}
-					
-				});
-				
-			}
-		});
-		
-		final Button btnTestDetail = (Button)findViewById(R.id.btn_test_detail);
-		btnTestDetail.setOnClickListener(new Button.OnClickListener(){
-			@Override
-			public void onClick(View v)
-			{
-				Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
-				startActivity(intent);
-			}
-		});
-		
 		final Button btnTestSend = (Button)findViewById(R.id.btn_test_send);
 		btnTestSend.setOnClickListener(new Button.OnClickListener(){
 			public void onClick(View v){
