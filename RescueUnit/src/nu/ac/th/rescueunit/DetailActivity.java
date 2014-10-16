@@ -8,8 +8,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 public class DetailActivity extends Activity{
@@ -31,14 +33,24 @@ public class DetailActivity extends Activity{
 	AccidentData accidentData;
 	AccidentRescueState accidentRescueState;
 	
+	Spinner spin;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_detail);
 		
+		spin = (Spinner) findViewById(R.id.spinner_state_accident);
+		String[] obj = {"State 1", "State 2", "State 3"};
+		
+		ArrayAdapter adapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, obj);
+		spin.setAdapter(adapter);
+		
 		createInterface();
 		initializeVariables();
 		initializeGUIComponents();
+		
+		
 	}
 	
 	
