@@ -15,8 +15,6 @@ public class SelfUpdateService extends Service {
 		imei = IMEI.getDeviceIMEI(this);	
 	}
 
-
-
 	@Override
 	public IBinder onBind(Intent intent) {
 		return null;
