@@ -6,7 +6,7 @@ public class JSONKeys {
 	public static final String JSON_ADDITIONAL_INFO 	= "AdditionalInfo";
 	public static final String JSON_MISSION_REPORT 		= "MissionReport";
 	public static final String JSON_ACKNOWLEDGE_DATA 	= "AcknowledgeData";
-	public static final String JSON_RESCUE_DATA 		= "RescueData";
+	public static final String JSON_RESCUE_UNIT_DATA 	= "RescueUnitData";
 	public static final String JSON_RESCUE_STATUS 		= "RescueStatus";
 	
 	public static final String ACCIDENT_ID 			= "AccidentID";

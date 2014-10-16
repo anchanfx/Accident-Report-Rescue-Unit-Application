@@ -23,8 +23,12 @@ import android.widget.PopupWindow;
 public class MainActivity extends Activity {
 	private static final String BROADCAST_POLLING_ACCIDENT 
 		= "nu.ac.th.rescueunit.android.action.broadcast.pollingaccident";
+	private static final String BROADCAST_SELF_UPDATE 
+	= "nu.ac.th.rescueunit.android.action.broadcast.selfupdate";
+	
 	//private BroadcastReceiver dataBroadcastReceiver;
 	private AccidentPollingService_BroadcastReceiver accidentPollingService_BroadcastReceiver;
+	private SelfUpdateService_BroadcastReceiver selfUpdateService_BroadcastReceiver;
 	
 	private ListView listViewAccident;
 	private OnItemClickListener listViewAccidentListener;
@@ -72,6 +76,14 @@ public class MainActivity extends Activity {
 			registerReceiver(accidentPollingService_BroadcastReceiver , intentFilter);
 			
 			Intent intent = new Intent(BROADCAST_POLLING_ACCIDENT);  
+	        sendBroadcast(intent);
+		}
+		
+		if(!isMyServiceRunning(SelfUpdateService.class, getApplicationContext())) {
+			IntentFilter intentFilter = new IntentFilter(BROADCAST_SELF_UPDATE);
+			registerReceiver(selfUpdateService_BroadcastReceiver , intentFilter);
+			
+			Intent intent = new Intent(BROADCAST_SELF_UPDATE);  
 	        sendBroadcast(intent);
 		}
 	}
