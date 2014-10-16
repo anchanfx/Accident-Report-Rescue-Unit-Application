@@ -25,8 +25,8 @@ public class Compatibility_PHP_JAVATest {
 	
 	@Test
 	public void testConvertBooleanInPhpToJava() throws Exception {
-		boolean actual1 = Compatibility_PHP_JAVA.booleanInPhpToJava(intFalse);
-		boolean actual2 = Compatibility_PHP_JAVA.booleanInPhpToJava(intTrue);
+		boolean actual1 = Compatibility_PHP_JAVA.intToBoolean(intFalse);
+		boolean actual2 = Compatibility_PHP_JAVA.intToBoolean(intTrue);
 		boolean expect1 = false;
 		boolean expect2 = true;
 		

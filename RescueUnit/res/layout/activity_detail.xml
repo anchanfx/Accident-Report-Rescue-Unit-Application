@@ -145,16 +145,6 @@
         android:text="@string/nodata" />
 
     <Button
-        android:id="@+id/btn_map"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/txt_show_message"
-        android:layout_alignParentBottom="true"
-        android:layout_alignRight="@+id/txt_latitude"
-        android:layout_marginBottom="30dp"
-        android:text="Map" />
-
-    <Button
         android:id="@+id/btn_accept"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -171,5 +161,30 @@
         android:layout_alignBottom="@+id/btn_accept"
         android:layout_toRightOf="@+id/Yes"
         android:text="ignore" />
+
+    <Button
+        android:id="@+id/btn_map"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/txt_show_message"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="66dp"
+        android:text="Map" />
+
+    <Spinner
+        android:id="@+id/spinner_state_accident"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/txt_traffic_bloack"
+        android:layout_below="@+id/btn_accept"
+        android:layout_toLeftOf="@+id/btn_ignore" />
+
+    <Button
+        android:id="@+id/btn_report_state"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/spinner_state_accident"
+        android:layout_alignLeft="@+id/btn_ignore"
+        android:text="Submit" />
 
 </RelativeLayout>

@@ -14,7 +14,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 public class MapActivity extends Activity{
-	  public static final String ACCIDENT_DATA = IntentExtraKeys.ACCIDENT_DATA;
+	  public static final String ACCIDENT_DATA = IntentExtraKeys.ACCIDENT_WITH_STATE;
 	  
 	  // GUI
 	  private GoogleMap googleMap;

@@ -1,6 +1,12 @@
 package nu.ac.th.rescueunit;
 
-public class AccidentWithState {
+import java.io.Serializable;
+
+public class AccidentWithState implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6297464040877144966L;
 	private AccidentData accidentData;
 	private AccidentRescueState rescueState;
 	
@@ -14,13 +20,21 @@ public class AccidentWithState {
 	public AccidentData getAccidentData() {
 		return accidentData;
 	}
+	
 	public void setAccidentData(AccidentData accidentData) {
 		this.accidentData = accidentData;
 	}
+	
 	public AccidentRescueState getAccidentRescueState() {
 		return rescueState;
 	}
+	
 	public void setAccidentRescueState(AccidentRescueState accidentRescueState) {
 		this.rescueState = accidentRescueState;
+	}
+	
+	@Override
+	public String toString() {
+	    return accidentData.toString() + "\n" + rescueState.toString();
 	}
 }
