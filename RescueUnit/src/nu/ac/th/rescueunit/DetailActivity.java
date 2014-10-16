@@ -41,7 +41,7 @@ public class DetailActivity extends Activity{
 		setContentView(R.layout.activity_detail);
 		
 		spin = (Spinner) findViewById(R.id.spinner_state_accident);
-		String[] obj = {"State 1", "State 2", "State 3"};
+		String[] obj = {"Abadon", "Success"};
 		
 		ArrayAdapter adapter = new ArrayAdapter(getApplicationContext(), R.layout.menu_spinner, obj);
 		spin.setAdapter(adapter);
