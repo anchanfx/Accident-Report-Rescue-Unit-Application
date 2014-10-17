@@ -6,9 +6,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -20,7 +23,7 @@ public class MainActivity extends Activity {
 	private static final String BROADCAST_SELF_UPDATE 
 	= "nu.ac.th.rescueunit.android.action.broadcast.selfupdate";
 	
-	//private BroadcastReceiver processIncomingAccidentService_BroadcastReceiver;
+	private BroadcastReceiver processIncomingAccidentServiceBroadcastReceiver;
 	private AccidentPollingService_BroadcastReceiver accidentPollingService_BroadcastReceiver;
 	private SelfUpdateService_BroadcastReceiver selfUpdateService_BroadcastReceiver;
 	
@@ -65,6 +68,18 @@ public class MainActivity extends Activity {
 	private void initializeVariables() {
 		listOfAccidentWithState = new ArrayList<AccidentWithState>();
 		accidentListAdapter = new AccidentListAdapter(this, listOfAccidentWithState);
+		
+		processIncomingAccidentServiceBroadcastReceiver = new BroadcastReceiver() {
+			
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				loadAccidentList();
+			}
+		};
+		
+		LocalBroadcastManager.getInstance(this)
+			.registerReceiver((processIncomingAccidentServiceBroadcastReceiver),
+					new IntentFilter(ProcessIncomingAccidentService.BROADCAST));
 	}
 	
 	private void initializeGUIComponents() {

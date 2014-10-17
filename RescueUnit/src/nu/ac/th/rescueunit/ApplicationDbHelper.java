@@ -132,7 +132,7 @@ public class ApplicationDbHelper extends SQLiteOpenHelper {
 	        	AccidentData accidentData = new AccidentData();
 	        	AccidentRescueState accidentRescueState = new AccidentRescueState();
 	        	accidentData.setAccidentID(cursor.getInt(0));
-	        	accidentData.setPosition(new Position(cursor.getDouble(1), cursor.getDouble(2)));
+	        	accidentData.setPosition(new Position(cursor.getDouble(2), cursor.getDouble(1)));
 	        	accidentData.setAdditionalInfo(
 	        			new AdditionalInfo(cursor.getString(3), 
 	        							   cursor.getInt(4), 

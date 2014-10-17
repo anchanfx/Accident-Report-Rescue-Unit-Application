@@ -10,11 +10,10 @@ public class RescueState {
 	public static final int PENDING = 0;
 	public static final int ACCEPT = 1;
 	public static final int COMPLETE = 100;
-	
 	public static final List<RescueState> LIST_OF_RESCUE_STATE_IN_PROCESS = generateInProcessState();
+	
 	private int code;
 	private String name;
-	
 	
 	public RescueState(int code, String name) {
 		super();

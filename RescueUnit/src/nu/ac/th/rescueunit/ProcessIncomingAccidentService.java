@@ -18,14 +18,14 @@ public class ProcessIncomingAccidentService extends IntentService {
 	= "nu.ac.th.rescueunit.accidentPollingRequestData";
 	public static final String BROADCAST 
 		= "nu.ac.th.rescueunit.ProcessIncomingAccidentService.BROADCAST";
-	public static final String MESSAGE = "Message";
+	public static final String MESSAGE = "Accident in DB has changed";
 	
 	private LocalBroadcastManager broadcaster;
 	private BroadcastReceiver missionReportBroadcastReceiver;
 	private ApplicationDbHelper db;
 	
-	private Intent detailActivityIntent;
-	private PendingIntent detailActivityPendingIntent;
+	private Intent startActivityIntent;
+	private PendingIntent startActivityPendingIntent;
 	
 	private AccidentPollingRequestData accidentPollingRequestData;
 	private AccidentPollingData accidentPollingData;
@@ -82,6 +82,7 @@ public class ProcessIncomingAccidentService extends IntentService {
 		}
 		
 		db.addAccidentRescueState(accidentData.getAccidentID(), accidentRescueState);
+		sendLocalBroadCast();
 		
 		reportPendingState(accidentPollingData, accidentRescueState);
 		notifyIncomingAccident(accidentWithState);
@@ -92,7 +93,7 @@ public class ProcessIncomingAccidentService extends IntentService {
 				// REPORT
 			// IF YES
 				// Check latest rescue state of this specific accident
-					// IF EQUAL TO RED STATE
+					// IF EQUAL TO RED STATE or EMPTY
 						// INSERT NEW PENDING STATE
 						// REPORT
 					// IF NO
@@ -100,6 +101,26 @@ public class ProcessIncomingAccidentService extends IntentService {
 		stopSelf();
 	}
 	
+	private void reportPendingState(AccidentPollingData accidentPollingData, 
+			AccidentRescueState accidentRescueState) {
+		AccidentData accidentData = accidentPollingData.getAccidentData();
+		MissionReport pending = new MissionReport(
+				accidentPollingRequestData.getImei(),
+				accidentData.getAccidentID(), 
+				accidentRescueState.getState(), 
+				accidentRescueState.getAssignDateTime(),
+				accidentRescueState.getDateTime(), 
+				RescueState.DEFAULT_MESSAGE);
+		
+		Intent pendingReportIntent = new Intent(this, MissionReportService.class);
+		pendingReportIntent.putExtra(MissionReportService.MISSION_REPORT_DATA, pending);
+		startService(pendingReportIntent);
+	}
+	
+	/**
+	 * Acknowledge Received from report pending state back to server
+	 * @param acknowledgeDataCollection
+	 */
 	private void processReportAcknowledge(AcknowledgeDataCollection acknowledgeDataCollection) {
 		PendingIntent contentIntent = PendingIntent.getActivity(
 			    getApplicationContext(),
@@ -116,32 +137,20 @@ public class ProcessIncomingAccidentService extends IntentService {
 				"",
 				contentIntent, 
 				MISSION_REPORT);
+		
 		ApplicationNotification.sendNotification(param);
 	}
 	
-	private void reportPendingState(
-			AccidentPollingData accidentPollingData,
-			AccidentRescueState accidentRescueState) {
-		AccidentData accidentData = accidentPollingData.getAccidentData();
-		MissionReport pending = new MissionReport(
-				accidentPollingRequestData.getImei(),
-				accidentData.getAccidentID(), 
-				accidentRescueState.getState(), 
-				accidentRescueState.getAssignDateTime(),
-				accidentRescueState.getDateTime(), 
-				RescueState.DEFAULT_MESSAGE);
-		
-		Intent pendingReportIntent = new Intent(this, MissionReportService.class);
-		pendingReportIntent.putExtra(MissionReportService.MISSION_REPORT_DATA, pending);
-		startService(pendingReportIntent);
-	}
-	
+	/**
+	 * Alert Notification for new Accident or old Accident with pending state??
+	 * @param accidentWithState
+	 */
 	private void notifyIncomingAccident(AccidentWithState accidentWithState) {
 		AccidentData accidentData = accidentWithState.getAccidentData();
 		AccidentRescueState accidentRescueState = accidentWithState.getAccidentRescueState();
-		detailActivityIntent = new Intent(this, DetailActivity.class);
-		detailActivityIntent.putExtra(DetailActivity.ACCIDENT_WITH_STATE, accidentWithState);
-		detailActivityPendingIntent = PendingIntent.getActivity(this, 0, detailActivityIntent, 0);
+		startActivityIntent = new Intent(this, MainActivity.class);
+		//startActivityIntent.putExtra(DetailActivity.ACCIDENT_WITH_STATE, accidentWithState);
+		startActivityPendingIntent = PendingIntent.getActivity(this, 0, startActivityIntent, 0);
 		
 		Position position = accidentData.getPosition();
 		AdditionalInfo additionalInfo = accidentData.getAdditionalInfo();
@@ -154,11 +163,14 @@ public class ProcessIncomingAccidentService extends IntentService {
 					accidentData.getAccidentID() + "\n" +
 							position.toString() + "\n" + 
 							additionalInfo.toString(),
-					detailActivityPendingIntent, 
+					startActivityPendingIntent, 
 					INCOMING_ACCIDENT);
 		ApplicationNotification.sendNotification(param);
 	}
 	
+	/**
+	 * Send broadcast for notifying Data in DB has changed
+	 */
 	private void sendLocalBroadCast() {
 		Intent intent = new Intent(BROADCAST);
 	    intent.putExtra(MESSAGE, "");
