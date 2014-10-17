@@ -1,10 +1,17 @@
 package nu.ac.th.rescueunit;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.TimeZone;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.gesture.Gesture;
+import android.gesture.GestureLibraries;
+import android.gesture.GestureLibrary;
+import android.gesture.GestureOverlayView;
+import android.gesture.GestureOverlayView.OnGesturePerformedListener;
+import android.gesture.Prediction;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -13,6 +20,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.ViewFlipper;
 
 public class DetailActivity extends Activity{
 	public static final String ACCIDENT_WITH_STATE = IntentExtraKeys.ACCIDENT_WITH_STATE;
@@ -35,6 +43,9 @@ public class DetailActivity extends Activity{
 	
 	Spinner spin;
 	
+	private GestureLibrary gestureLib;
+	ViewFlipper vf;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -46,6 +57,13 @@ public class DetailActivity extends Activity{
 		ArrayAdapter adapter = new ArrayAdapter(getApplicationContext(), R.layout.menu_spinner, obj);
 		spin.setAdapter(adapter);
 		
+		GestureOverlayView gest1 = (GestureOverlayView)findViewById(R.id.gestures1);
+		gestureLib = GestureLibraries.fromRawResource(this, R.raw.gestures);
+		if(!gestureLib.load()){
+			finish();
+		}
+		gest1.addOnGesturePerformedListener(handleGestureListener);
+		
 		createInterface();
 		initializeVariables();
 		initializeGUIComponents();
@@ -53,6 +71,55 @@ public class DetailActivity extends Activity{
 		
 	}
 	
+	/*private OnGesturePerformedListene handleGestureListener = new OnGesturePerformedListener() {
+		public void onGesturePerformed(GestureOverlayView gestureView,
+				Gesture gesture) {
+ 
+			ArrayList<Prediction> predictions = gestureLib.recognize(gesture);
+ 
+			if (predictions.size() > 0) {
+				Prediction prediction = predictions.get(0);
+				if (prediction.score > 1.0) {
+					
+				     	String action = predictions.get(0).name;
+				        if ("Slide to left".equals(action)) {
+				        	vf.showPrevious();
+							Toast.makeText(MainActivity.this, prediction.name + " : Show Next Picture" ,
+									Toast.LENGTH_SHORT).show();	
+				        } else if ("Slide to right".equals(action)) {
+				        	vf.showPrevious();
+							vf.showPrevious();
+							Toast.makeText(MainActivity.this, prediction.name + " : Show Previous Picture" ,
+									Toast.LENGTH_SHORT).show();		
+				        }
+				   
+
+				}
+			}
+ 
+		}
+	};
+	
+	*/
+	
+	private OnGesturePerformedListener handleGestureListener = new OnGesturePerformedListener() {
+		
+		@Override
+		public void onGesturePerformed(GestureOverlayView overlay, Gesture gesture) {
+			// TODO Auto-generated method stub
+			ArrayList<Prediction> presictions = gestureLib.recognize(gesture);
+			if(presictions.size() > 0){
+				Prediction prediction = presictions.get(0);
+				if(prediction.score > 1.0){
+					
+					Intent mapActivityIntent = new Intent(getApplicationContext(), MapActivity.class);
+					mapActivityIntent.putExtra(MapActivity.ACCIDENT_DATA, accidentData);
+					startActivity(mapActivityIntent);
+					
+				}
+			}
+		}
+	};
 	
 	private void createInterface() {
 		btnMapListener = new OnClickListener() {
