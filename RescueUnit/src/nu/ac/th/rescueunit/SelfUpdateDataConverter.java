@@ -5,9 +5,6 @@ import org.json.JSONObject;
 
 public class SelfUpdateDataConverter {
 	
-	/* Doesn't convert Date into JSON Object because of using server time instead
-	 * So Date is not sent to server
-	 */
 	public static JSONObject toJSON(SelfUpdateData selfUpdateData) {
 		JSONObject holder = new JSONObject();
 			JSONObject jsonObject_RescueUnitData = new JSONObject();

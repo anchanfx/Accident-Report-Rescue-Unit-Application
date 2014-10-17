@@ -6,7 +6,7 @@ import android.os.IBinder;
 
 public class SelfUpdateService extends Service {
 	private Thread thread;
-	private SelfUpdateThreadListener threadListener;
+	private SelfUpdateListener threadListener;
 	
 	private SelfUpdateData selfUpdateData;
 	private static int UPDATE_INTERVAL = 15;
@@ -21,7 +21,7 @@ public class SelfUpdateService extends Service {
 		selfUpdateData = new SelfUpdateData(new Position(),
 				new RescueUnitStatus(), IMEI.getDeviceIMEI(this));
 		
-		threadListener = new SelfUpdateThreadListener() {
+		threadListener = new SelfUpdateListener() {
 			
 			@Override
 			public void onUpdateData(AcknowledgeDataCollection acknowledgeDataCollection) {
@@ -32,7 +32,7 @@ public class SelfUpdateService extends Service {
 	
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		thread = new Thread(new SelfUpdate(
+		thread = new Thread(new SelfUpdate(this,
 				threadListener, UPDATE_INTERVAL, selfUpdateData, new TCP_IP()));
 		thread.start();
 		return START_STICKY;

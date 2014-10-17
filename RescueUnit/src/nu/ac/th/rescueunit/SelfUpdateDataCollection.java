@@ -2,18 +2,18 @@ package nu.ac.th.rescueunit;
 
 import java.util.Date;
 
-public class SelfDataCollection {
+public class SelfUpdateDataCollection {
 	private SelfUpdateData mRescuData;
 	
-	public SelfDataCollection() {
+	public SelfUpdateDataCollection() {
 		this(new SelfUpdateData(), new Date());
 	}
 	
-	public SelfDataCollection(SelfUpdateData rescuData) {
+	public SelfUpdateDataCollection(SelfUpdateData rescuData) {
 		this(rescuData, new Date());
 	}
 
-	public SelfDataCollection(SelfUpdateData rescuData, Date date) {
+	public SelfUpdateDataCollection(SelfUpdateData rescuData, Date date) {
 		super();
 		mRescuData = rescuData;
 	}

@@ -5,16 +5,18 @@ import java.util.concurrent.TimeUnit;
 import android.content.Context;
 
 public class SelfUpdate implements Runnable{
-	private SelfUpdateThreadListener listener;
-	private IServerConnector connector;
 	private Context context;
+	private SelfUpdateListener listener;
+	private IServerConnector connector;
 	private SelfUpdateData selfUpdateData;
 	private AcknowledgeDataCollection ack;
-	private int updateInterval;
 	
-	public SelfUpdate(SelfUpdateThreadListener listener,int updateInterval, 
+	private int updateInterval;
+
+	public SelfUpdate(Context context, SelfUpdateListener listener, int updateInterval, 
 			SelfUpdateData selfUpdateData, IServerConnector connector){
 		super();
+		this.context = context;
 		this.listener = listener;
 		this.updateInterval = updateInterval;
 		this.selfUpdateData = selfUpdateData;
@@ -24,18 +26,18 @@ public class SelfUpdate implements Runnable{
 	}
 	
 	private void initialize() {
-		updateSelfUpdateData();
+		readRescueUnitUpdate();
 	}
 	
-	private void updateSelfUpdateData() {
-		// Update Position
-		// Update RescueUnitStatus
+	private void readRescueUnitUpdate() {
+		selfUpdateData.setPosition(ApplicationSharedPreference.getPosition(context));
+		selfUpdateData.setStatus(ApplicationSharedPreference.getStatus(context));
 	}
 	
 	public void run(){
 		
 		while(true) {
-			updateSelfUpdateData();
+			readRescueUnitUpdate();
 			try {
 				try {
 					ack = connector.updateRescueUnit(selfUpdateData);
@@ -46,7 +48,7 @@ public class SelfUpdate implements Runnable{
 				
 				TimeUnit.SECONDS.sleep(updateInterval);
 			} catch (InterruptedException e) {
-				//e.printStackTrace();
+				
 			}
 		}
 	}

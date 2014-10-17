@@ -21,11 +21,14 @@ public class MainActivity extends Activity {
 	private static final String BROADCAST_POLLING_ACCIDENT 
 		= "nu.ac.th.rescueunit.android.action.broadcast.pollingaccident";
 	private static final String BROADCAST_SELF_UPDATE 
-	= "nu.ac.th.rescueunit.android.action.broadcast.selfupdate";
+		= "nu.ac.th.rescueunit.android.action.broadcast.selfupdate";
+	private static final String BROADCAST_LOCATOR
+		= "nu.ac.th.rescueunit.android.action.broadcast.locator";
 	
 	private BroadcastReceiver processIncomingAccidentServiceBroadcastReceiver;
 	private AccidentPollingService_BroadcastReceiver accidentPollingService_BroadcastReceiver;
 	private SelfUpdateService_BroadcastReceiver selfUpdateService_BroadcastReceiver;
+	private LocatorService_BroadcastReceiver locatorService_BroadcastReceiver;
 	
 	private AccidentListAdapter accidentListAdapter;
 	private ListView listViewAccident;
@@ -102,6 +105,14 @@ public class MainActivity extends Activity {
 			registerReceiver(selfUpdateService_BroadcastReceiver , intentFilter);
 			
 			Intent intent = new Intent(BROADCAST_SELF_UPDATE);  
+	        sendBroadcast(intent);
+		}
+		
+		if(!isMyServiceRunning(LocatorService.class, getApplicationContext())) {
+			IntentFilter intentFilter = new IntentFilter(BROADCAST_LOCATOR);
+			registerReceiver(selfUpdateService_BroadcastReceiver , intentFilter);
+			
+			Intent intent = new Intent(BROADCAST_LOCATOR);  
 	        sendBroadcast(intent);
 		}
 	}

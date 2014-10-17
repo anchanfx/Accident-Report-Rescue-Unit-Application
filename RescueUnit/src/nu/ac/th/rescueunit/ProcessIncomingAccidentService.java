@@ -15,7 +15,7 @@ public class ProcessIncomingAccidentService extends IntentService {
 	public static final String ACCIDENT_POLLING_DATA 
 		= "nu.ac.th.rescueunit.accidentPollingData";
 	public static final String ACCIDENT_POLLING_REQUEST_DATA 
-	= "nu.ac.th.rescueunit.accidentPollingRequestData";
+		= "nu.ac.th.rescueunit.accidentPollingRequestData";
 	public static final String BROADCAST 
 		= "nu.ac.th.rescueunit.ProcessIncomingAccidentService.BROADCAST";
 	public static final String MESSAGE = "Accident in DB has changed";
@@ -54,6 +54,7 @@ public class ProcessIncomingAccidentService extends IntentService {
 				processReportAcknowledge(acknowledgeDataCollection);
 			}
 		};
+		
 		LocalBroadcastManager.getInstance(this)
 			.registerReceiver((missionReportBroadcastReceiver),
 				new IntentFilter(MissionReportService.BROADCAST));

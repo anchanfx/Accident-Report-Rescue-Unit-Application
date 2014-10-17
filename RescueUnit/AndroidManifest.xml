@@ -32,7 +32,7 @@
         <service android:name=".MissionReportService"></service>
         <service android:name=".ProcessIncomingAccidentService"></service>
         <service android:name=".SelfUpdateService"></service>
-        
+        <service android:name=".LocatorService"></service>
         
         <receiver android:name=".AccidentPollingService_BroadcastReceiver" >  
 		    <intent-filter >  
@@ -47,6 +47,13 @@
 		        <action android:name="nu.ac.th.rescueunit.android.action.broadcast.selfupdate"/>
 		    </intent-filter>  
 		</receiver> 
+		
+        <receiver android:name=".LocatorService_BroadcastReceiver" >  
+		    <intent-filter >  
+		        <action android:name="android.intent.action.BOOT_COMPLETED" />
+		        <action android:name="nu.ac.th.rescueunit.android.action.broadcast.locator"/>
+		    </intent-filter>  
+		</receiver>
 		
         <activity
             android:name="MainActivity"
