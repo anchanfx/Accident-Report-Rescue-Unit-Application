@@ -5,20 +5,14 @@ import static nu.ac.th.rescueunit.ServiceUtility.isMyServiceRunning;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Button;
 import android.widget.ListView;
-import android.widget.PopupWindow;
 
 public class MainActivity extends Activity {
 	private static final String BROADCAST_POLLING_ACCIDENT 
@@ -26,32 +20,33 @@ public class MainActivity extends Activity {
 	private static final String BROADCAST_SELF_UPDATE 
 	= "nu.ac.th.rescueunit.android.action.broadcast.selfupdate";
 	
-	//private BroadcastReceiver dataBroadcastReceiver;
+	//private BroadcastReceiver processIncomingAccidentService_BroadcastReceiver;
 	private AccidentPollingService_BroadcastReceiver accidentPollingService_BroadcastReceiver;
 	private SelfUpdateService_BroadcastReceiver selfUpdateService_BroadcastReceiver;
 	
+	private AccidentListAdapter accidentListAdapter;
 	private ListView listViewAccident;
 	private OnItemClickListener listViewAccidentListener;
 	private ApplicationDbHelper db;
+	
+	private List<AccidentWithState> listOfAccidentWithState;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		createInterface();
 		db = new ApplicationDbHelper(this);
-		listViewAccident = (ListView)findViewById(R.id.listView_accident);
-		listViewAccident.setOnItemClickListener(listViewAccidentListener);
 		
-		List<AccidentWithState> listOfAccidentWithState = db.getAccidentWithState();
-		AccidentListAdapter adapter = new AccidentListAdapter(this, listOfAccidentWithState);
-		listViewAccident.setAdapter(adapter);
-		
-		final Button btnTestSend = (Button)findViewById(R.id.btn_test_send);
-		btnTestSend.setOnClickListener(new Button.OnClickListener(){
-			public void onClick(View v){
-				
-			}
-		});
+		createInterface();
+		initializeVariables();
+		initializeGUIComponents();
+		startMainApplicationServices();
+	}
+	
+	@Override
+	protected void onStart() {
+		super.onStart();
+		loadAccidentList();
 	}
 	
 	private void createInterface() {
@@ -67,10 +62,18 @@ public class MainActivity extends Activity {
 		};
 	}
 	
-	@Override
-	protected void onStart() {
-		super.onStart();
-		
+	private void initializeVariables() {
+		listOfAccidentWithState = new ArrayList<AccidentWithState>();
+		accidentListAdapter = new AccidentListAdapter(this, listOfAccidentWithState);
+	}
+	
+	private void initializeGUIComponents() {
+		listViewAccident = (ListView)findViewById(R.id.listView_accident);
+		listViewAccident.setOnItemClickListener(listViewAccidentListener);
+		listViewAccident.setAdapter(accidentListAdapter);
+	}
+
+	private void startMainApplicationServices() {
 		if(!isMyServiceRunning(AccidentPollingService.class, getApplicationContext())) {
 			IntentFilter intentFilter = new IntentFilter(BROADCAST_POLLING_ACCIDENT);
 			registerReceiver(accidentPollingService_BroadcastReceiver , intentFilter);
@@ -87,9 +90,11 @@ public class MainActivity extends Activity {
 	        sendBroadcast(intent);
 		}
 	}
-
-	@Override
-	protected void onStop() {
-		super.onStop();
+	
+	private void loadAccidentList() {
+		listOfAccidentWithState = db.getAccidentWithState();
+		accidentListAdapter.clear();
+		accidentListAdapter.addAll(listOfAccidentWithState);
+		accidentListAdapter.notifyDataSetChanged();
 	}
 }

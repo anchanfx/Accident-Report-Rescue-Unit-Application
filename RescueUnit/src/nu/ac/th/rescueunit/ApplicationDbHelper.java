@@ -51,11 +51,12 @@ public class ApplicationDbHelper extends SQLiteOpenHelper {
 	private static final String SQL_QUERY_ACCIDENT_WITH_SATE = 
 			"SELECT  *, MAX(" 
 						+ AccidentRescueStateScheme.TABLE_NAME + "." 
-						+ AccidentRescueStateScheme.COLUMN_DATE_TIME + ")" +
+						+ AccidentRescueStateScheme.COLUMN_DATE_TIME + ") AS DATE_TIME_MAX" +
 					" FROM " + AccidentDataScheme.TABLE_NAME + 
 					" INNER JOIN " + AccidentRescueStateScheme.TABLE_NAME + 
 					" ON " + AccidentDataScheme.COLUMN_ID + "=" + AccidentRescueStateScheme.COLUMN_ACCIDENT_ID +
-					" GROUP BY " + AccidentDataScheme.COLUMN_ID;
+					" GROUP BY " + AccidentDataScheme.COLUMN_ID + 
+					" ORDER BY DATE_TIME_MAX DESC";
 			
 	public ApplicationDbHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -141,9 +142,9 @@ public class ApplicationDbHelper extends SQLiteOpenHelper {
 	        	accidentData.setDateTime(ApplicationTime.constructDate(cursor.getLong(8)));
 	        	accidentData.setServerDateTime(ApplicationTime.constructDate(cursor.getLong(9)));
 	        	accidentData.setResolve(intToBoolean(cursor.getInt(10)));
-	        	accidentRescueState.setAssignDateTime(ApplicationTime.constructDate(cursor.getLong(12)));
+	        	accidentRescueState.setDateTime(ApplicationTime.constructDate(cursor.getLong(12)));
 	        	accidentRescueState.setState(cursor.getInt(13));
-	        	accidentRescueState.setDateTime(ApplicationTime.constructDate(cursor.getLong(14)));
+	        	accidentRescueState.setAssignDateTime(ApplicationTime.constructDate(cursor.getLong(14)));
 	            AccidentWithState accidentWithState = new AccidentWithState(accidentData, accidentRescueState);
 	            listOfAccidentWithStates.add(accidentWithState);
 	        } while (cursor.moveToNext());

@@ -1,29 +1,29 @@
 package nu.ac.th.rescueunit;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.TimeZone;
+import java.util.List;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
-import android.gesture.Gesture;
-import android.gesture.GestureLibraries;
-import android.gesture.GestureLibrary;
-import android.gesture.GestureOverlayView;
-import android.gesture.GestureOverlayView.OnGesturePerformedListener;
-import android.gesture.Prediction;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.ViewFlipper;
+import android.widget.Toast;
 
 public class DetailActivity extends Activity{
 	public static final String ACCIDENT_WITH_STATE = IntentExtraKeys.ACCIDENT_WITH_STATE;
+	
+	private BroadcastReceiver missionReportBroadcastReceiver;
+	private ApplicationDbHelper db;
 	
 	// GUI
 	private TextView txtViewDate;
@@ -34,93 +34,40 @@ public class DetailActivity extends Activity{
 	private TextView txtViewAmountOfInjured;
 	private TextView txtViewMessage;
 	private CheckBox chkboxTrafficBlocked;
+	
 	private Button btnMap;
+	private Button btnAcccept;
+	private Button btnReject;
+	private Button btnSubmit;
 	private OnClickListener btnMapListener;
+	private OnClickListener btnAccceptListener;
+	private OnClickListener btnRejectListener;
+	private OnClickListener btnSubmitListener;
 	
-	AccidentWithState accidentWithState;
-	AccidentData accidentData;
-	AccidentRescueState accidentRescueState;
+	private AccidentWithState accidentWithState;
+	private AccidentData accidentData;
+	private AccidentRescueState accidentRescueState;
+	private AccidentRescueState newAccidentRescueState;
 	
-	Spinner spin;
-	
-	private GestureLibrary gestureLib;
-	ViewFlipper vf;
+	private Spinner spinner_state;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_detail);
 		
-		spin = (Spinner) findViewById(R.id.spinner_state_accident);
-		String[] obj = {"Abadon", "Success"};
-		
-		ArrayAdapter adapter = new ArrayAdapter(getApplicationContext(), R.layout.menu_spinner, obj);
-		spin.setAdapter(adapter);
-		
-		GestureOverlayView gest1 = (GestureOverlayView)findViewById(R.id.gestures1);
-		gestureLib = GestureLibraries.fromRawResource(this, R.raw.gestures);
-		if(!gestureLib.load()){
-			finish();
-		}
-		gest1.addOnGesturePerformedListener(handleGestureListener);
-		
 		createInterface();
 		initializeVariables();
 		initializeGUIComponents();
-		
-		
 	}
 	
-	/*private OnGesturePerformedListene handleGestureListener = new OnGesturePerformedListener() {
-		public void onGesturePerformed(GestureOverlayView gestureView,
-				Gesture gesture) {
- 
-			ArrayList<Prediction> predictions = gestureLib.recognize(gesture);
- 
-			if (predictions.size() > 0) {
-				Prediction prediction = predictions.get(0);
-				if (prediction.score > 1.0) {
-					
-				     	String action = predictions.get(0).name;
-				        if ("Slide to left".equals(action)) {
-				        	vf.showPrevious();
-							Toast.makeText(MainActivity.this, prediction.name + " : Show Next Picture" ,
-									Toast.LENGTH_SHORT).show();	
-				        } else if ("Slide to right".equals(action)) {
-				        	vf.showPrevious();
-							vf.showPrevious();
-							Toast.makeText(MainActivity.this, prediction.name + " : Show Previous Picture" ,
-									Toast.LENGTH_SHORT).show();		
-				        }
-				   
+	@Override
+	protected void onStart() {
+		super.onStart();
+		loadStateSpinner();
+		// Restrict State for current State
+	}
 
-				}
-			}
- 
-		}
-	};
-	
-	*/
-	
-	private OnGesturePerformedListener handleGestureListener = new OnGesturePerformedListener() {
-		
-		@Override
-		public void onGesturePerformed(GestureOverlayView overlay, Gesture gesture) {
-			// TODO Auto-generated method stub
-			ArrayList<Prediction> presictions = gestureLib.recognize(gesture);
-			if(presictions.size() > 0){
-				Prediction prediction = presictions.get(0);
-				if(prediction.score > 1.0){
-					
-					Intent mapActivityIntent = new Intent(getApplicationContext(), MapActivity.class);
-					mapActivityIntent.putExtra(MapActivity.ACCIDENT_DATA, accidentData);
-					startActivity(mapActivityIntent);
-					
-				}
-			}
-		}
-	};
-	
 	private void createInterface() {
 		btnMapListener = new OnClickListener() {
 			
@@ -131,10 +78,37 @@ public class DetailActivity extends Activity{
 				startActivity(mapActivityIntent);
 			}
 		};
+		
+		btnAccceptListener = new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				submitStatus(RescueState.ACCEPT);
+			}
+		};
+		
+		btnRejectListener = new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				submitStatus(RescueState.REJECT);
+			}
+		};
+		
+		btnSubmitListener = new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				RescueState rescueState = (RescueState)spinner_state.getSelectedItem();
+				submitStatus(rescueState.getCode());
+			}
+		};
 	}
 	
 	private void initializeVariables() {
+		db = new ApplicationDbHelper(this);
 		Intent receivedIntent = getIntent();
+		
 		try {
 			accidentWithState = (AccidentWithState)receivedIntent.getSerializableExtra(ACCIDENT_WITH_STATE);
 			accidentData = accidentWithState.getAccidentData();
@@ -142,6 +116,21 @@ public class DetailActivity extends Activity{
 		} catch (NullPointerException e) {
 			// NO DATA 
 		}
+		
+		missionReportBroadcastReceiver = new BroadcastReceiver() {
+			
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				AcknowledgeDataCollection acknowledgeDataCollection = 
+						(AcknowledgeDataCollection)intent
+						.getSerializableExtra(MissionReportService.ACKNOWLEDGE_DATA_COLLECTION);
+				onAcknowledgeReceive(acknowledgeDataCollection);
+			}
+		};
+		
+		LocalBroadcastManager.getInstance(this)
+			.registerReceiver((missionReportBroadcastReceiver),
+					new IntentFilter(MissionReportService.BROADCAST));
 	}
 	
 	private void initializeGUIComponents() {
@@ -173,12 +162,66 @@ public class DetailActivity extends Activity{
 			
 			chkboxTrafficBlocked = (CheckBox)findViewById(R.id.Yes);
 			chkboxTrafficBlocked.setChecked(additionalInfo.isTrafficBlocked());
+			chkboxTrafficBlocked.setEnabled(false);
 		} catch (NullPointerException e) {
 			// NO DATA 
 		}
 		
-		
 		btnMap = (Button)findViewById(R.id.btn_map);
 		btnMap.setOnClickListener(btnMapListener);
+		btnAcccept = (Button)findViewById(R.id.btn_accept);
+		btnAcccept.setOnClickListener(btnAccceptListener);
+		btnReject = (Button)findViewById(R.id.btn_reject);
+		btnReject.setOnClickListener(btnRejectListener);
+		btnSubmit = (Button)findViewById(R.id.btn_submit_state);
+		btnSubmit.setOnClickListener(btnSubmitListener);
+		
+		spinner_state = (Spinner)findViewById(R.id.spinner_state_accident);
+	}
+	
+	private void loadStateSpinner() {
+		// FUTURE : Load Process State from DB?
+		List<RescueState> listOfRescueState = 
+				RescueState.LIST_OF_RESCUE_STATE_IN_PROCESS;
+		RescueStateSpinnerAdapter adapter = 
+				new RescueStateSpinnerAdapter(getApplicationContext(), listOfRescueState);
+		spinner_state.setAdapter(adapter);
+	}
+	
+	private void submitStatus(int rescueState) {
+		Date assignDate = accidentRescueState.getAssignDateTime();
+		Date date = ApplicationTime.newDateInstance();
+		
+		MissionReport missionReport = new MissionReport(
+				IMEI.getDeviceIMEI(this),
+				accidentData.getAccidentID(), 
+				rescueState, 
+				assignDate,
+				date, 
+				"");
+		newAccidentRescueState = new AccidentRescueState(assignDate, date, rescueState);
+		
+		reportMission(missionReport);
+		// LOCK? waiting for submition
+	}
+	
+	private void reportMission(MissionReport missionReport) {
+		Intent reportIntent = new Intent(this, MissionReportService.class);
+		reportIntent.putExtra(MissionReportService.MISSION_REPORT_DATA, missionReport);
+		startService(reportIntent);
+	}
+	
+	private void onAcknowledgeReceive(AcknowledgeDataCollection acknowledgeDataCollection) {
+		saveRescueState(accidentData.getAccidentID(), newAccidentRescueState);
+		accidentRescueState = newAccidentRescueState;
+		// Restrict State for current State
+		// Release LOCK?
+		Toast t = Toast.makeText(this, "Mission Report Submit Successful", Toast.LENGTH_SHORT);
+		t.setGravity(Gravity.CENTER, 0, 0);
+		t.show();
+	}
+	
+	private void saveRescueState(int accidentId, AccidentRescueState accidentRescueState) {
+		db.addAccidentRescueState(accidentId, accidentRescueState);
 	}
 }

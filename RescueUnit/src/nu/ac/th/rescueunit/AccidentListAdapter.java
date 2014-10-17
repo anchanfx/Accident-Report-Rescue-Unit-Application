@@ -38,14 +38,21 @@ public class AccidentListAdapter extends BaseAdapter {
 		View vi = convertView;
 		
 	    if(convertView == null) {
-	    	vi = inflater.inflate(R.layout.accident_list_item, null);
+	    	vi = inflater.inflate(R.layout.accident_list_item, parent, false);
 	    }
 
 	    
-	    TextView txtView_accident = (TextView)vi.findViewById(R.id.accidentData);
+	    TextView txtView_accident = (TextView)vi.findViewById(R.id.txtview_accidentData);
 	    txtView_accident.setText(listOfAccidentWithState.get(position).toString());
 
 	    return vi;
 	}
-
+	
+	public void clear() {
+		listOfAccidentWithState.clear();
+	}
+	
+	public void addAll(List<AccidentWithState> listOfAccidentWithState) {
+		this.listOfAccidentWithState = listOfAccidentWithState;
+	}
 }
