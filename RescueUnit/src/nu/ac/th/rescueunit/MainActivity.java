@@ -110,7 +110,7 @@ public class MainActivity extends Activity {
 		
 		if(!isMyServiceRunning(LocatorService.class, getApplicationContext())) {
 			IntentFilter intentFilter = new IntentFilter(BROADCAST_LOCATOR);
-			registerReceiver(selfUpdateService_BroadcastReceiver , intentFilter);
+			registerReceiver(locatorService_BroadcastReceiver , intentFilter);
 			
 			Intent intent = new Intent(BROADCAST_LOCATOR);  
 	        sendBroadcast(intent);

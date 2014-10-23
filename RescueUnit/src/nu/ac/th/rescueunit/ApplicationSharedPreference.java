@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 public class ApplicationSharedPreference {
-	private static final long DEFAULT_LONG = 0;
+	private static final String DEFAULT_POSITION = "0.0";
 	private static final boolean DEFAULT_BOOLEAN = true;
 	
 	private static final String SAVED_LONGITUDE = "Longitude";
@@ -32,17 +32,18 @@ public class ApplicationSharedPreference {
 	public static void storePosition(Context context, Position position) {
 		SharedPreferences sharedPreferences = loadSharedPreferences(context);
 		SharedPreferences.Editor editor = sharedPreferences.edit();
-		editor.putLong(SAVED_LONGITUDE, Double.doubleToRawLongBits(position.getLongitude()));
-		editor.putLong(SAVED_LATITUDE, Double.doubleToRawLongBits(position.getLatitude()));
+		editor.putString(SAVED_LONGITUDE, Double.toString(position.getLongitude()));
+		editor.putString(SAVED_LATITUDE, Double.toString(position.getLatitude()));
 		editor.commit();
+		
 	}
 	
 	public static Position getPosition(Context context) {
 		SharedPreferences sharedPreferences = loadSharedPreferences(context);
-		long longitude = sharedPreferences.getLong(SAVED_LONGITUDE, DEFAULT_LONG);
-		long latitude = sharedPreferences.getLong(SAVED_LATITUDE, DEFAULT_LONG);
+		String longitude = sharedPreferences.getString(SAVED_LONGITUDE, DEFAULT_POSITION);
+		String latitude = sharedPreferences.getString(SAVED_LATITUDE, DEFAULT_POSITION);
 		
-		return new Position(Double.longBitsToDouble(latitude), Double.longBitsToDouble(longitude));
+		return new Position(Double.valueOf(latitude), Double.valueOf(longitude));
 	}
 	
 	private static SharedPreferences loadSharedPreferences(Context context) {

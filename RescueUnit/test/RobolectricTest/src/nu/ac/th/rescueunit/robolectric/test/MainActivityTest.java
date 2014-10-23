@@ -20,7 +20,7 @@ public class MainActivityTest{
     @Before
     public void setup()
     {
-        this.mainActivity = controller.create().get();
+        //this.mainActivity = controller.create().get();
     }
     
     @Test
