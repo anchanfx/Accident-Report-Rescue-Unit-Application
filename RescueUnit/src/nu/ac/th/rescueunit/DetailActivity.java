@@ -16,6 +16,8 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Spinner;
+import android.widget.TabHost;
+import android.widget.TabHost.TabSpec;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,6 +57,19 @@ public class DetailActivity extends Activity{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_detail);
+		
+		TabHost tabHost=(TabHost)findViewById(R.id.tabhost);
+		tabHost.setup();
+		
+		TabHost.TabSpec tabSpec=tabHost.newTabSpec("tab1");
+		tabSpec.setContent(R.id.tab1);
+		tabSpec.setIndicator("Detail");
+		tabHost.addTab(tabSpec);
+		
+		tabSpec=tabHost.newTabSpec("tab2");
+		tabSpec.setContent(R.id.tab2);
+		tabSpec.setIndicator("Map");
+		tabHost.addTab(tabSpec);
 		
 		createInterface();
 		initializeVariables();

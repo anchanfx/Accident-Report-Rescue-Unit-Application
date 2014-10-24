@@ -1,198 +1,256 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/LinearLayout1"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
-    
-    <android.gesture.GestureOverlayView
-	 android:id="@+id/gestures1"
-	 android:layout_width="fill_parent"
-	 android:layout_height="fill_parent"
-	 android:gestureStrokeType="multiple"
-	 android:eventsInterceptionEnabled="true"/>
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/txt_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="36dp"
-        android:text="Date : "
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+    <TabHost
+        android:id="@+id/tabhost"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
 
-    <TextView
-        android:id="@+id/txt_show_datetime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/txt_longitude"
-        android:layout_toRightOf="@+id/txt_injured"
-        android:text="@string/nodata" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/txt_show_longitude"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/txt_longitude"
-        android:layout_alignBottom="@+id/txt_longitude"
-        android:layout_marginLeft="16dp"
-        android:layout_toRightOf="@+id/txt_traffic_bloack"
-        android:text="@string/nodata" />
+            <TabWidget
+                android:id="@android:id/tabs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+            </TabWidget>
 
-    <TextView
-        android:id="@+id/txt_show_latitude"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/txt_latitude"
-        android:layout_alignBottom="@+id/txt_latitude"
-        android:layout_toRightOf="@+id/txt_message"
-        android:text="@string/nodata" />
+            <FrameLayout
+                android:id="@android:id/tabcontent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
 
-    <TextView
-        android:id="@+id/txt_show_type"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/txt_dead"
-        android:layout_centerHorizontal="true"
-        android:text="@string/nodata" />
+                <LinearLayout
+                    android:id="@+id/tab1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
 
-    <TextView
-        android:id="@+id/txt_show_dead"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/txt_dead"
-        android:layout_alignLeft="@+id/txt_show_datetime"
-        android:text="@string/nodata" />
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/txt_show_injured"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/txt_traffic_bloack"
-        android:layout_centerHorizontal="true"
-        android:text="@string/nodata" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp" >
 
-    <CheckBox
-        android:id="@+id/Yes"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/txt_message"
-        android:layout_alignLeft="@+id/txt_show_longitude"
-        android:text="Yes!" />
+                            <TextView
+                                android:id="@+id/txt_date"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="20dp"
+                                android:text="Date : "
+                                android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <TextView
-        android:id="@+id/txt_longitude"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/txt_date"
-        android:layout_below="@+id/txt_date"
-        android:text="Longitude : "
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+                            <TextView
+                                android:id="@+id/txt_show_datetime"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/nodata" />
+                        </LinearLayout>
 
-    <TextView
-        android:id="@+id/txt_latitude"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/txt_longitude"
-        android:layout_below="@+id/txt_show_longitude"
-        android:text="Latitude :"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" >
 
-    <TextView
-        android:id="@+id/txt_type"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/txt_date"
-        android:layout_below="@+id/txt_latitude"
-        android:text="Type : "
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+                            <TextView
+                                android:id="@+id/txt_longitude"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="20dp"
+                                android:text="Longitude : "
+                                android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <TextView
-        android:id="@+id/txt_dead"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/txt_latitude"
-        android:layout_below="@+id/txt_type"
-        android:text="Dead : "
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+                            <TextView
+                                android:id="@+id/txt_show_longitude"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/nodata" />
+                        </LinearLayout>
 
-    <TextView
-        android:id="@+id/txt_injured"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/txt_dead"
-        android:layout_below="@+id/txt_dead"
-        android:text="Injured"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" >
 
-    <TextView
-        android:id="@+id/txt_traffic_bloack"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/txt_type"
-        android:layout_below="@+id/txt_injured"
-        android:text="Traffic Block"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+                            <TextView
+                                android:id="@+id/txt_latitude"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="20dp"
+                                android:text="Latitude : "
+                                android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <TextView
-        android:id="@+id/txt_message"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/txt_injured"
-        android:layout_below="@+id/txt_traffic_bloack"
-        android:text="Message : "
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+                            <TextView
+                                android:id="@+id/txt_show_latitude"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/nodata" />
+                        </LinearLayout>
 
-    <TextView
-        android:id="@+id/txt_show_message"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/txt_dead"
-        android:layout_below="@+id/txt_message"
-        android:text="@string/nodata" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" >
 
-    <Button
-        android:id="@+id/btn_accept"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/btn_map"
-        android:layout_alignBottom="@+id/btn_map"
-        android:layout_toRightOf="@+id/txt_message"
-        android:text="@string/accept" />
+                            <TextView
+                                android:id="@+id/txt_type"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="20dp"
+                                android:text="Type : "
+                                android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <Button
-        android:id="@+id/btn_reject"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/btn_accept"
-        android:layout_alignBottom="@+id/btn_accept"
-        android:layout_toRightOf="@+id/Yes"
-        android:text="@string/reject" />
+                            <TextView
+                                android:id="@+id/txt_show_type"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/nodata" />
+                        </LinearLayout>
 
-    <Button
-        android:id="@+id/btn_map"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/txt_show_message"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="66dp"
-        android:text="Map" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" >
 
-    <Spinner
-        android:id="@+id/spinner_state_accident"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/txt_traffic_bloack"
-        android:layout_below="@+id/btn_accept"
-        android:layout_toLeftOf="@+id/btn_reject"
-        android:spinnerMode="dropdown" />
+                            <TextView
+                                android:id="@+id/txt_dead"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="20dp"
+                                android:text="Dead : "
+                                android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <Button
-        android:id="@+id/btn_submit_state"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/spinner_state_accident"
-        android:layout_alignLeft="@+id/btn_reject"
-        android:text="@string/submit" />
+                            <TextView
+                                android:id="@+id/txt_show_dead"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/nodata" />
+                        </LinearLayout>
 
-</RelativeLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" >
+
+                            <TextView
+                                android:id="@+id/txt_injured"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="20dp"
+                                android:text="Injured : "
+                                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                            <TextView
+                                android:id="@+id/txt_show_injured"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/nodata" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" >
+
+                            <TextView
+                                android:id="@+id/txt_traffic_bloack"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="20dp"
+                                android:text="Traffic Block : "
+                                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                            <CheckBox
+                                android:id="@+id/Yes"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Yes!" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" >
+
+                            <TextView
+                                android:id="@+id/txt_message"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="20dp"
+                                android:text="Message : "
+                                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                            <TextView
+                                android:id="@+id/txt_show_message"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/nodata" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" >
+
+                            <Button
+                                android:id="@+id/btn_accept"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/accept" />
+
+                            <Button
+                                android:id="@+id/btn_reject"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/reject" />
+
+                            <Button
+                                android:id="@+id/btn_map"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="66dp"
+                                android:text="Map" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" >
+
+                            <Spinner
+                                android:id="@+id/spinner_state_accident"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:spinnerMode="dropdown" />
+
+                            <Button
+                                android:id="@+id/btn_submit_state"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/submit" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/tab2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical" >
+                    </LinearLayout>
+
+                </LinearLayout>
+            </FrameLayout>
+        </LinearLayout>
+    </TabHost>
+
+</LinearLayout>
