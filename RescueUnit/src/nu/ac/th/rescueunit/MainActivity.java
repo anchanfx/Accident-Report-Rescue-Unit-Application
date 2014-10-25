@@ -54,7 +54,7 @@ public class MainActivity extends Activity {
 		super.onStart();
 		loadAccidentList();
 	}
-	
+	/*
 	private void createInterface() {
 		listViewAccidentListener = new OnItemClickListener() {
 
@@ -63,6 +63,20 @@ public class MainActivity extends Activity {
 				AccidentWithState item = (AccidentWithState)listViewAccident.getItemAtPosition(position);
 				Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
 				intent.putExtra(DetailActivity.ACCIDENT_WITH_STATE, item);
+				startActivity(intent);
+			}
+		};
+	}
+	*/
+	
+	private void createInterface() {
+		listViewAccidentListener = new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> adapter, View v, int position, long id) {
+				AccidentWithState item = (AccidentWithState)listViewAccident.getItemAtPosition(position);
+				Intent intent = new Intent(getApplicationContext(), TabHostDetailActivity.class);
+				intent.putExtra(TabHostDetailActivity.ACCIDENT_WITH_STATE, item);
 				startActivity(intent);
 			}
 		};
