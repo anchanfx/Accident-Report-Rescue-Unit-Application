@@ -75,12 +75,14 @@ public class MainActivity extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> adapter, View v, int position, long id) {
 				AccidentWithState item = (AccidentWithState)listViewAccident.getItemAtPosition(position);
-				Intent intent = new Intent(getApplicationContext(), TabHostDetailActivity.class);
-				intent.putExtra(TabHostDetailActivity.ACCIDENT_WITH_STATE, item);
+				Intent intent = new Intent(getApplicationContext(), TabHostActivity.class);
+				intent.putExtra(TabHostActivity.ACCIDENT_WITH_STATE, item);
 				startActivity(intent);
 			}
 		};
 	}
+	
+	
 	
 	private void initializeVariables() {
 		listOfAccidentWithState = new ArrayList<AccidentWithState>();
