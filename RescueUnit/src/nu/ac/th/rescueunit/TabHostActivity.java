@@ -11,10 +11,16 @@ public class TabHostActivity extends Activity{
 	
 	private TabHost myTabHost;
 	private LocalActivityManager myLocalActivityManager;
+	private ApplicationDbHelper db;
+	private AccidentWithState accidentWithState;
+	private AccidentData accidentData;
+	private AccidentRescueState accidentRescueState;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_tab);
+		initializeVariables();
 		
 		myTabHost = (TabHost)findViewById(R.id.tabhost_detail);
 		myLocalActivityManager = new LocalActivityManager(this, false);
@@ -23,11 +29,25 @@ public class TabHostActivity extends Activity{
 		
 		TabHost.TabSpec spec;
 		Intent goDetail = new Intent().setClass(this, DetailActivity.class);
+		goDetail.putExtra(DetailActivity.ACCIDENT_WITH_STATE, accidentWithState);
 		spec = myTabHost.newTabSpec("tab1").setIndicator("Detail").setContent(goDetail);
 		myTabHost.addTab(spec);
 		
 		Intent goMap = new Intent().setClass(this, MapActivity.class);
 		spec = myTabHost.newTabSpec("tab2").setIndicator("Map").setContent(goMap);
 		myTabHost.addTab(spec);
+	}
+	
+	private void initializeVariables() {
+		db = new ApplicationDbHelper(this);
+		Intent receivedIntent = getIntent();
+		
+		try {
+			accidentWithState = (AccidentWithState)receivedIntent.getSerializableExtra(ACCIDENT_WITH_STATE);
+			accidentData = accidentWithState.getAccidentData();
+			accidentRescueState = accidentWithState.getAccidentRescueState();
+		} catch (NullPointerException e) {
+			// NO DATA 
+		}
 	}
 }
