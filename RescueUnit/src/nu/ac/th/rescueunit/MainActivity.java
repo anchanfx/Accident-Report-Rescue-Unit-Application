@@ -47,27 +47,23 @@ public class MainActivity extends Activity {
 		initializeVariables();
 		initializeGUIComponents();
 		startMainApplicationServices();
+		loadAccidentList();
 	}
 	
 	@Override
 	protected void onStart() {
 		super.onStart();
 		loadAccidentList();
+		LocalBroadcastManager.getInstance(this)
+			.registerReceiver((processIncomingAccidentServiceBroadcastReceiver),
+				new IntentFilter(ProcessIncomingAccidentService.BROADCAST));
 	}
-	/*
-	private void createInterface() {
-		listViewAccidentListener = new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> adapter, View v, int position, long id) {
-				AccidentWithState item = (AccidentWithState)listViewAccident.getItemAtPosition(position);
-				Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
-				intent.putExtra(DetailActivity.ACCIDENT_WITH_STATE, item);
-				startActivity(intent);
-			}
-		};
+	
+	@Override
+	protected void onStop() {
+		LocalBroadcastManager.getInstance(this).unregisterReceiver(processIncomingAccidentServiceBroadcastReceiver);
+		super.onStop();
 	}
-	*/
 	
 	private void createInterface() {
 		listViewAccidentListener = new OnItemClickListener() {
@@ -76,8 +72,8 @@ public class MainActivity extends Activity {
 			public void onItemClick(AdapterView<?> adapter, View v, int position, long id) {
 				AccidentWithState item = (AccidentWithState)listViewAccident.getItemAtPosition(position);
 
-				Intent intent = new Intent(getApplicationContext(), TabHostActivity.class);
-				intent.putExtra(TabHostActivity.ACCIDENT_WITH_STATE, item);
+				Intent intent = new Intent(getApplicationContext(), DetailMapTabHostActivity.class);
+				intent.putExtra(DetailMapTabHostActivity.ACCIDENT_WITH_STATE, item);
 				
 				startActivity(intent);
 			}
@@ -95,10 +91,6 @@ public class MainActivity extends Activity {
 				loadAccidentList();
 			}
 		};
-		
-		LocalBroadcastManager.getInstance(this)
-			.registerReceiver((processIncomingAccidentServiceBroadcastReceiver),
-					new IntentFilter(ProcessIncomingAccidentService.BROADCAST));
 	}
 	
 	private void initializeGUIComponents() {

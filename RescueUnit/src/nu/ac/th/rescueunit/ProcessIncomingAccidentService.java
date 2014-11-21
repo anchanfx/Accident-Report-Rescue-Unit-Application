@@ -81,12 +81,8 @@ public class ProcessIncomingAccidentService extends IntentService {
 			// Constraint Fail
 			// Assume duplication on AccidentData
 		}
-		
-		db.addAccidentRescueState(accidentData.getAccidentID(), accidentRescueState);
-		sendLocalBroadCast();
-		
+
 		reportPendingState(accidentPollingData, accidentRescueState);
-		notifyIncomingAccident(accidentWithState);
 		
 		// Check Accident Duplication
 			// IF NO
@@ -99,7 +95,6 @@ public class ProcessIncomingAccidentService extends IntentService {
 						// REPORT
 					// IF NO
 						// DO NOTHING
-		stopSelf();
 	}
 	
 	private void reportPendingState(AccidentPollingData accidentPollingData, 
@@ -123,7 +118,7 @@ public class ProcessIncomingAccidentService extends IntentService {
 	 * @param acknowledgeDataCollection
 	 */
 	private void processReportAcknowledge(AcknowledgeDataCollection acknowledgeDataCollection) {
-		PendingIntent contentIntent = PendingIntent.getActivity(
+		/*PendingIntent contentIntent = PendingIntent.getActivity(
 			    getApplicationContext(),
 			    0,
 			    new Intent(),
@@ -139,7 +134,12 @@ public class ProcessIncomingAccidentService extends IntentService {
 				contentIntent, 
 				MISSION_REPORT);
 		
-		ApplicationNotification.sendNotification(param);
+		ApplicationNotification.sendNotification(param);*/
+		LocalBroadcastManager.getInstance(this).unregisterReceiver(missionReportBroadcastReceiver);
+		sendLocalBroadCast();
+		notifyIncomingAccident(accidentWithState);
+
+		stopSelf();
 	}
 	
 	/**

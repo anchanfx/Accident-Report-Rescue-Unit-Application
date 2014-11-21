@@ -57,7 +57,8 @@
 		
         <activity
             android:name="MainActivity"
-            android:label="@string/title_activity_main" >
+            android:label="@string/title_activity_main"
+            android:configChanges="orientation|keyboard|keyboardHidden" >
             
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -65,7 +66,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
+        <activity android:name="DetailMapTabHostActivity"></activity>
         <activity android:name="DetailActivity"></activity>
         <activity android:name="MapActivity"></activity>
         
@@ -76,8 +77,7 @@
         <meta-data
 	    android:name="com.google.android.maps.v2.API_KEY"
 	    android:value="AIzaSyDatSnhCyuznN9Dr20kg-s8I0xttAuuBc8"/>
-        <activity android:name="TabHostDetailActivity"></activity>
-        <activity android:name="TabHostActivity"></activity>
+       
         
     </application>
 

@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -22,9 +23,8 @@ import android.widget.Toast;
 public class DetailActivity extends Activity{
 	public static final String ACCIDENT_WITH_STATE = IntentExtraKeys.ACCIDENT_WITH_STATE;
 	
-	
 	private BroadcastReceiver missionReportBroadcastReceiver;
-	private ApplicationDbHelper db;
+	//private ApplicationDbHelper db;
 	
 	// GUI
 	private TextView txtViewDate;
@@ -36,11 +36,9 @@ public class DetailActivity extends Activity{
 	private TextView txtViewMessage;
 	private CheckBox chkboxTrafficBlocked;
 	
-	private Button btnMap;
 	private Button btnAcccept;
 	private Button btnReject;
 	private Button btnSubmit;
-	private OnClickListener btnMapListener;
 	private OnClickListener btnAccceptListener;
 	private OnClickListener btnRejectListener;
 	private OnClickListener btnSubmitListener;
@@ -48,7 +46,6 @@ public class DetailActivity extends Activity{
 	private AccidentWithState accidentWithState;
 	private AccidentData accidentData;
 	private AccidentRescueState accidentRescueState;
-	private AccidentRescueState newAccidentRescueState;
 	
 	private Spinner spinner_state;
 	
@@ -58,28 +55,25 @@ public class DetailActivity extends Activity{
 		setContentView(R.layout.activity_detail);
 		initializeVariables();
 		createInterface();
-		
 		initializeGUIComponents();
+		loadStateSpinner();
 	}
 	
 	@Override
 	protected void onStart() {
 		super.onStart();
-		loadStateSpinner();
-		// Restrict State for current State
+		LocalBroadcastManager.getInstance(this)
+			.registerReceiver((missionReportBroadcastReceiver),
+				new IntentFilter(MissionReportService.BROADCAST));
 	}
-
+	
+	@Override
+	protected void onDestroy() {
+		LocalBroadcastManager.getInstance(this).unregisterReceiver(missionReportBroadcastReceiver);
+		super.onStop();
+	}
+	
 	private void createInterface() {
-		btnMapListener = new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				Intent mapActivityIntent = new Intent(getApplicationContext(), MapActivity.class);
-				mapActivityIntent.putExtra(MapActivity.ACCIDENT_DATA, accidentData);
-				startActivity(mapActivityIntent);
-			}
-		};
-		
 		btnAccceptListener = new OnClickListener() {
 			
 			@Override
@@ -107,7 +101,6 @@ public class DetailActivity extends Activity{
 	}
 	
 	private void initializeVariables() {
-		db = new ApplicationDbHelper(this);
 		Intent receivedIntent = getIntent();
 		
 		try {
@@ -125,13 +118,11 @@ public class DetailActivity extends Activity{
 				AcknowledgeDataCollection acknowledgeDataCollection = 
 						(AcknowledgeDataCollection)intent
 						.getSerializableExtra(MissionReportService.ACKNOWLEDGE_DATA_COLLECTION);
-				onAcknowledgeReceive(acknowledgeDataCollection);
+				MissionReport missionReport = 
+						(MissionReport)intent.getSerializableExtra(MissionReportService.MISSION_REPORT);
+				onReceivedBroadcastFromMissionReport(acknowledgeDataCollection, missionReport);
 			}
 		};
-		
-		LocalBroadcastManager.getInstance(this)
-			.registerReceiver((missionReportBroadcastReceiver),
-					new IntentFilter(MissionReportService.BROADCAST));
 	}
 	
 	private void initializeGUIComponents() {
@@ -168,8 +159,6 @@ public class DetailActivity extends Activity{
 			// NO DATA 
 		}
 		
-		btnMap = (Button)findViewById(R.id.btn_map);
-		btnMap.setOnClickListener(btnMapListener);
 		btnAcccept = (Button)findViewById(R.id.btn_accept);
 		btnAcccept.setOnClickListener(btnAccceptListener);
 		btnReject = (Button)findViewById(R.id.btn_reject);
@@ -200,10 +189,8 @@ public class DetailActivity extends Activity{
 				assignDate,
 				date, 
 				"");
-		newAccidentRescueState = new AccidentRescueState(assignDate, date, rescueState);
 		
 		reportMission(missionReport);
-		// LOCK? waiting for submition
 	}
 	
 	private void reportMission(MissionReport missionReport) {
@@ -212,17 +199,14 @@ public class DetailActivity extends Activity{
 		startService(reportIntent);
 	}
 	
-	private void onAcknowledgeReceive(AcknowledgeDataCollection acknowledgeDataCollection) {
-		saveRescueState(accidentData.getAccidentID(), newAccidentRescueState);
-		accidentRescueState = newAccidentRescueState;
-		// Restrict State for current State
-		// Release LOCK?
-		Toast t = Toast.makeText(this, "Mission Report Submit Successful", Toast.LENGTH_SHORT);
-		t.setGravity(Gravity.CENTER, 0, 0);
-		t.show();
-	}
-	
-	private void saveRescueState(int accidentId, AccidentRescueState accidentRescueState) {
-		db.addAccidentRescueState(accidentId, accidentRescueState);
+	private void onReceivedBroadcastFromMissionReport(AcknowledgeDataCollection acknowledgeDataCollection, 
+			MissionReport missionReport) {
+		if(missionReport.getAccidentID() == accidentData.getAccidentID()) {
+			// UPDATE STATE IN GUI
+			
+			Toast t = Toast.makeText(this, "Rescue State Update!", Toast.LENGTH_SHORT);
+			t.setGravity(Gravity.CENTER, 0, 0);
+			t.show();
+		}
 	}
 }

@@ -28,8 +28,8 @@ public class AccidentPollingService extends Service {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		accidentPollingRequestData = new AccidentPollingRequestData("2");
-						 //= new AccidentPollingData(IMEI.getDeviceIMEI(this));
+		accidentPollingRequestData //= new AccidentPollingRequestData("2");
+						 = new AccidentPollingRequestData(IMEI.getDeviceIMEI(this));
 		broadcaster = LocalBroadcastManager.getInstance(this);
 		threadListener = new PollAccidentListener() {
 			@Override
