@@ -77,7 +77,7 @@ public class MainActivity extends Activity {
 				AccidentWithState item = (AccidentWithState)listViewAccident.getItemAtPosition(position);
 
 				Intent intent = new Intent(getApplicationContext(), TabHostActivity.class);
-				intent.putExtra(DetailActivity.ACCIDENT_WITH_STATE, item);
+				intent.putExtra(TabHostActivity.ACCIDENT_WITH_STATE, item);
 				
 				startActivity(intent);
 			}

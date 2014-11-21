@@ -8,11 +8,11 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -41,7 +41,7 @@ public class MapActivity extends Activity{
 	 protected void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
 	    setContentView(R.layout.activity_map);
-	    
+	    MapsInitializer.initialize(getApplicationContext());
 	    createInterface();
 		initializeVariables();
 		initializeGUIComponents(); 
@@ -54,6 +54,7 @@ public class MapActivity extends Activity{
 	} 
 	
 	private void initializeVariables() {
+		
 		readUpdatePosition();
 		Intent receivedIntent = getIntent();
 		
@@ -73,6 +74,7 @@ public class MapActivity extends Activity{
 		LocalBroadcastManager.getInstance(this)
 			.registerReceiver((LocatorServiceBroadcastReceiver),
 					new IntentFilter(LocatorService.BROADCAST));
+
 	}
 	
 	@SuppressLint("NewApi")

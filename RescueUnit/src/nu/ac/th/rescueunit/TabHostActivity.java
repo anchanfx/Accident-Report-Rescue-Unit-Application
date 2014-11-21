@@ -20,6 +20,7 @@ public class TabHostActivity extends Activity{
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_tab);
+		
 		initializeVariables();
 		
 		myTabHost = (TabHost)findViewById(R.id.tabhost_detail);
@@ -34,6 +35,7 @@ public class TabHostActivity extends Activity{
 		myTabHost.addTab(spec);
 		
 		Intent goMap = new Intent().setClass(this, MapActivity.class);
+		goMap.putExtra(MapActivity.ACCIDENT_DATA, accidentData);
 		spec = myTabHost.newTabSpec("tab2").setIndicator("Map").setContent(goMap);
 		myTabHost.addTab(spec);
 	}
