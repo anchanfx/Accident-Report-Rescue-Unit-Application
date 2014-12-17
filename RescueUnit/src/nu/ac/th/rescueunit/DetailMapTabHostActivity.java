@@ -37,6 +37,7 @@ public class DetailMapTabHostActivity extends Activity{
 	private void initializeTabHost(Bundle savedInstanceState) {
 		TabHost.TabSpec detailSpec;
 		TabHost.TabSpec mapSpec;
+		TabHost.TabSpec reportState;
 		
 		mainTabHost = (TabHost)findViewById(R.id.tabhost_detailmap);
 		myLocalActivityManager = new LocalActivityManager(this, false);
@@ -53,6 +54,10 @@ public class DetailMapTabHostActivity extends Activity{
 		goMap.putExtra(MapActivity.ACCIDENT_DATA, accidentData);
 		mapSpec = mainTabHost.newTabSpec("tab2").setIndicator("Map").setContent(goMap);
 		mainTabHost.addTab(mapSpec);
+		
+		Intent goReport = new Intent().setClass(this, ReportStateActivity.class);
+		reportState = mainTabHost.newTabSpec("tab3").setIndicator("State").setContent(goReport);
+		mainTabHost.addTab(reportState);
 	}
 	
 }
