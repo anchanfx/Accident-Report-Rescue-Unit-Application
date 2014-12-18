@@ -4,27 +4,50 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp" >
+
+        <Button
+            android:id="@+id/btn_accept"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_weight="0.25"
+            android:text="@string/accept" />
+
+        <Button
+            android:id="@+id/btn_reject"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="20dp"
+            android:layout_weight="0.25"
+            android:text="@string/reject" />
+
+    </LinearLayout>
+
     <Spinner
         android:id="@+id/spiner_state_of_accident"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         android:spinnerMode="dropdown" />
-
-    <TextView
-        android:id="@+id/txtview_msg_report_state"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="20dp"
-        android:text="Message"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+    
+    <TextView android:id="@+id/txtview_msg_report_state" 
+        android:layout_width="wrap_content" 
+        android:layout_height="wrap_content" 
+        android:layout_marginLeft="20dp" 
+        android:layout_marginRight="20dp" 
+        android:layout_marginTop="20dp" 
+        android:text="Message" 
+        android:textAppearance="?android:attr/textAppearanceLarge"/>
 
     <EditText
-        android:id="@+id/editText1"
+        android:id="@+id/editTextMessage"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="100dp"
         android:layout_marginBottom="20dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
@@ -36,11 +59,11 @@
     </EditText>
 
     <Button
-        android:id="@+id/btn_send_state"
+        android:id="@+id/btn_report_mission"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:text="Send" />
+        android:text="Report" />
 
 </LinearLayout>

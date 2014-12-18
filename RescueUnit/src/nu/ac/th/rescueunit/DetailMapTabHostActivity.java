@@ -56,7 +56,8 @@ public class DetailMapTabHostActivity extends Activity{
 		mainTabHost.addTab(mapSpec);
 		
 		Intent goReport = new Intent().setClass(this, ReportStateActivity.class);
-		reportState = mainTabHost.newTabSpec("tab3").setIndicator("State").setContent(goReport);
+		goReport.putExtra(ReportStateActivity.ACCIDENT_WITH_STATE, accidentWithState);
+		reportState = mainTabHost.newTabSpec("tab3").setIndicator("Mission Report").setContent(goReport);
 		mainTabHost.addTab(reportState);
 	}
 	

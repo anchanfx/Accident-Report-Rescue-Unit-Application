@@ -69,6 +69,7 @@
         <activity android:name="DetailMapTabHostActivity"></activity>
         <activity android:name="DetailActivity"></activity>
         <activity android:name="MapActivity"></activity>
+        <activity android:name="ReportStateActivity"></activity>
         
         <meta-data 
         android:name="com.google.android.gms.version"
@@ -77,8 +78,6 @@
         <meta-data
 	    android:name="com.google.android.maps.v2.API_KEY"
 	    android:value="AIzaSyDatSnhCyuznN9Dr20kg-s8I0xttAuuBc8"/>
-        <activity android:name="ReportStateActivity"></activity>
-       
         
     </application>
 
