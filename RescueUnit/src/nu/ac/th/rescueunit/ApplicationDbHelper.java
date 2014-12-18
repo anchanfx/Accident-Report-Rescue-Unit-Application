@@ -8,6 +8,7 @@ import java.util.List;
 
 import nu.ac.th.rescueunit.AccidentDataContract.AccidentDataScheme;
 import nu.ac.th.rescueunit.AccidentRescueStateContract.AccidentRescueStateScheme;
+import nu.ac.th.rescueunit.AccidentInProgressContract.AccidentInProgressScheme;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -42,11 +43,17 @@ public class ApplicationDbHelper extends SQLiteOpenHelper {
 					AccidentRescueStateScheme.COLUMN_DATE_TIME + 
 					")" +
 				")";
+	private static final String SQL_CREATE_TABLE_ACCIDENT_IN_PROGRESS =
+			"CREATE TABLE IF NOT EXISTS " + AccidentInProgressScheme.TABLE_NAME + "(" +
+				AccidentInProgressScheme.COLUMN_ACCIDENT_ID + " INT PRIMARY KEY" +
+				")";
 	
 	private static final String SQL_DELETE_TABLE_ACCIDENT_DATA = 
 			"DROP TABLE IF EXISTS " + AccidentDataScheme.TABLE_NAME;
 	private static final String SQL_DELETE_TABLE_ACCIDENT_RESCUE_STATE = 
 			"DROP TABLE IF EXISTS " + AccidentRescueStateScheme.TABLE_NAME;
+	private static final String SQL_DELETE_TABLE_ACCIDENT_IN_PROGRESS = 
+			"DROP TABLE IF EXISTS " + AccidentInProgressScheme.TABLE_NAME;
 	
 	private static final String SQL_QUERY_ACCIDENT_WITH_SATE = 
 			"SELECT  *, MAX(" 
@@ -57,7 +64,11 @@ public class ApplicationDbHelper extends SQLiteOpenHelper {
 					" ON " + AccidentDataScheme.COLUMN_ID + "=" + AccidentRescueStateScheme.COLUMN_ACCIDENT_ID +
 					" GROUP BY " + AccidentDataScheme.COLUMN_ID + 
 					" ORDER BY DATE_TIME_MAX DESC";
-			
+	
+	private static final String SQL_QUERY_ACCIDENT_IN_PROGRESS = 
+			"SELECT  *" +
+					" FROM " + AccidentInProgressScheme.TABLE_NAME;
+	
 	public ApplicationDbHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 	}
@@ -66,12 +77,14 @@ public class ApplicationDbHelper extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase db) {
 		db.execSQL(SQL_CREATE_TABLE_ACCIDENT_DATA);
 		db.execSQL(SQL_CREATE_TABLE_ACCIDENT_RESCUE_STATE);
+		db.execSQL(SQL_CREATE_TABLE_ACCIDENT_IN_PROGRESS);
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		db.execSQL(SQL_DELETE_TABLE_ACCIDENT_DATA);
 		db.execSQL(SQL_DELETE_TABLE_ACCIDENT_RESCUE_STATE);
+		db.execSQL(SQL_DELETE_TABLE_ACCIDENT_IN_PROGRESS);
 		onCreate(db);
 	}
 
@@ -116,6 +129,36 @@ public class ApplicationDbHelper extends SQLiteOpenHelper {
 				assignDate.getTime());
 		
 		db.insertOrThrow(AccidentRescueStateScheme.TABLE_NAME, null, values);
+	}
+	
+	public void addAccidentInProgress(int accidentID) {
+		SQLiteDatabase db = getWritableDatabase();
+		
+		ContentValues values = new ContentValues();
+		values.put(AccidentInProgressScheme.COLUMN_ACCIDENT_ID, accidentID);
+		
+		db.insertOrThrow(AccidentInProgressScheme.TABLE_NAME, null, values);
+	}
+	
+	public void removeAccidentInProgress(int accidentID) {
+		SQLiteDatabase db = getWritableDatabase();
+		
+		db.delete(AccidentInProgressScheme.TABLE_NAME, 
+				AccidentInProgressScheme.COLUMN_ACCIDENT_ID + "=?", 
+				new String[]{Integer.toString(accidentID)});
+	}
+	
+	public boolean isAccidentInProgressEmpty() {
+		SQLiteDatabase db = getWritableDatabase();
+		boolean empty = true;
+	    Cursor cursor = db.rawQuery(SQL_QUERY_ACCIDENT_IN_PROGRESS, null);
+	    int rowCount = cursor.getCount();
+	    
+	    if(rowCount > 0) {
+	    	empty = false;
+	    }
+	    
+		return empty;
 	}
 	
 	public void getAccidentData() {

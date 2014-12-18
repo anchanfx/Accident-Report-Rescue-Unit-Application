@@ -11,6 +11,7 @@ public class MissionReportService extends IntentService {
 	public static final String ACKNOWLEDGE_DATA_COLLECTION = "AcknowledgeDataCollection";
 	public static final String MISSION_REPORT = "MissionReport";
 	
+	private AvailableStatusController availableStatusController;
 	private ApplicationDbHelper db;
 	private LocalBroadcastManager broadcaster;
 	private IServerConnector connector;
@@ -27,6 +28,7 @@ public class MissionReportService extends IntentService {
 		broadcaster = LocalBroadcastManager.getInstance(this);
 		connector = new TCP_IP();
 		db = new ApplicationDbHelper(this);
+		availableStatusController = new AvailableStatusController(this);
 	}
 
 	@Override
@@ -38,6 +40,7 @@ public class MissionReportService extends IntentService {
 		try {
 			acknowledgeDataCollection = connector.reportMission(missionReport);
 			db.addAccidentRescueState(missionReport.getAccidentID(), accidentRescueState);
+			availableStatusController.onStatusChange(missionReport.getAccidentID(), missionReport.getRescueState());
 			sendLocalBroadCast(acknowledgeDataCollection);
 		} catch (ApplicationException e) {
 			// report fail, do something?
