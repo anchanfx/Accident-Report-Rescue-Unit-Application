@@ -56,17 +56,20 @@ public class MapActivity extends Activity {
 	}
 	
 	@Override
-	protected void onStart() {
-		super.onStart();
+	protected void onResume() {
+		super.onResume();
+		LocalBroadcastManager.getInstance(this).
+			registerReceiver((LocatorServiceBroadcastReceiver),
+				new IntentFilter(LocatorService.BROADCAST));
 		onRescueUnitPositionUpdate();
 	}
 	
 	@Override
-	protected void onStop() {
-		super.onStop();
-		//LocalBroadcastManager.getInstance(this).unregisterReceiver(LocatorServiceBroadcastReceiver);
+	protected void onPause() {
+		super.onPause();
+		LocalBroadcastManager.getInstance(this).unregisterReceiver(LocatorServiceBroadcastReceiver);
 	}
-
+	
 	private void createInterface() {
 				
 	} 
@@ -86,10 +89,6 @@ public class MapActivity extends Activity {
 				onRescueUnitPositionUpdate();
 			}
 		};
-		
-		LocalBroadcastManager.getInstance(this).
-			registerReceiver((LocatorServiceBroadcastReceiver),
-					new IntentFilter(LocatorService.BROADCAST));
 	}
 	
 	@SuppressLint("NewApi")

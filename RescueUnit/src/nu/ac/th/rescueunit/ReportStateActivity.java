@@ -49,17 +49,17 @@ public class ReportStateActivity extends Activity {
 	}
 	
 	@Override
-	protected void onStart() {
-		super.onStart();
+	protected void onResume() {
+		super.onResume();
 		LocalBroadcastManager.getInstance(this)
 			.registerReceiver((missionReportBroadcastReceiver),
 				new IntentFilter(MissionReportService.BROADCAST));
 	}
-	
+
 	@Override
-	protected void onDestroy() {
+	protected void onPause() {
+		super.onPause();
 		LocalBroadcastManager.getInstance(this).unregisterReceiver(missionReportBroadcastReceiver);
-		super.onStop();
 	}
 	
 	private void initializeVariables() {
