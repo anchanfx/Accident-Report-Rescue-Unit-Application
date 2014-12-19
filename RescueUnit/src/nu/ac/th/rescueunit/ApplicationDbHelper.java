@@ -55,13 +55,24 @@ public class ApplicationDbHelper extends SQLiteOpenHelper {
 	private static final String SQL_DELETE_TABLE_ACCIDENT_IN_PROGRESS = 
 			"DROP TABLE IF EXISTS " + AccidentInProgressScheme.TABLE_NAME;
 	
-	private static final String SQL_QUERY_ACCIDENT_WITH_SATE = 
+	private static final String SQL_QUERY_ACCIDENTS_WITH_SATE = 
 			"SELECT  *, MAX(" 
 						+ AccidentRescueStateScheme.TABLE_NAME + "." 
 						+ AccidentRescueStateScheme.COLUMN_DATE_TIME + ") AS DATE_TIME_MAX" +
 					" FROM " + AccidentDataScheme.TABLE_NAME + 
 					" INNER JOIN " + AccidentRescueStateScheme.TABLE_NAME + 
 					" ON " + AccidentDataScheme.COLUMN_ID + "=" + AccidentRescueStateScheme.COLUMN_ACCIDENT_ID +
+					" GROUP BY " + AccidentDataScheme.COLUMN_ID + 
+					" ORDER BY DATE_TIME_MAX DESC";
+	
+	private static final String SQL_QUERY_SPECIFIC_ACCIDENT_WITH_SATE = 
+			"SELECT  *, MAX(" 
+						+ AccidentRescueStateScheme.TABLE_NAME + "." 
+						+ AccidentRescueStateScheme.COLUMN_DATE_TIME + ") AS DATE_TIME_MAX" +
+					" FROM " + AccidentDataScheme.TABLE_NAME + 
+					" INNER JOIN " + AccidentRescueStateScheme.TABLE_NAME + 
+					" ON " + AccidentDataScheme.COLUMN_ID + "=" + AccidentRescueStateScheme.COLUMN_ACCIDENT_ID +
+					" WHERE " + AccidentDataScheme.COLUMN_ID + "=?" +
 					" GROUP BY " + AccidentDataScheme.COLUMN_ID + 
 					" ORDER BY DATE_TIME_MAX DESC";
 	
@@ -161,18 +172,65 @@ public class ApplicationDbHelper extends SQLiteOpenHelper {
 		return empty;
 	}
 	
-	public void getAccidentData() {
+	// getSpecificAccidentWithState can be used to determine whether accident
+	public boolean isAccidentInAccidentData(int accidentID) {
+		SQLiteDatabase db = this.getReadableDatabase();
+		boolean isIn = false;
+		Cursor cursor = db.query(AccidentDataScheme.TABLE_NAME, 
+					null, 
+					AccidentDataScheme.COLUMN_ID + " = ?", 
+					new String[] {String.valueOf(accidentID)}, 
+					null, 
+					null,  
+					null);
+		int rowCount = cursor.getCount();
 		
+		if(rowCount > 0) {
+			isIn = true;
+	    }
+		
+		return isIn;
+	}
+	
+	public AccidentWithState getSpecificAccidentWithState(int accidentID) {
+		SQLiteDatabase db = this.getReadableDatabase();
+		AccidentWithState accidentWithState = null;
+		Cursor cursor = db.rawQuery(SQL_QUERY_SPECIFIC_ACCIDENT_WITH_SATE, 
+				new String [] {String.valueOf(accidentID)});
+	 
+	    if (cursor.moveToFirst()) {
+        	/*AccidentData accidentData = new AccidentData();
+        	AccidentRescueState accidentRescueState = new AccidentRescueState();
+        	accidentData.setAccidentID(cursor.getInt(0));
+        	accidentData.setPosition(new Position(cursor.getDouble(2), cursor.getDouble(1)));
+        	accidentData.setAdditionalInfo(
+        			new AdditionalInfo(cursor.getString(3), 
+        							   cursor.getInt(4), 
+        							   cursor.getInt(5), 
+        							   intToBoolean(cursor.getInt(6)), 
+        							   cursor.getString(7)));
+        	accidentData.setDateTime(ApplicationTime.constructDate(cursor.getLong(8)));
+        	accidentData.setServerDateTime(ApplicationTime.constructDate(cursor.getLong(9)));
+        	accidentData.setResolve(intToBoolean(cursor.getInt(10)));
+        	accidentRescueState.setDateTime(ApplicationTime.constructDate(cursor.getLong(12)));
+        	accidentRescueState.setState(cursor.getInt(13));
+        	accidentRescueState.setAssignDateTime(ApplicationTime.constructDate(cursor.getLong(14)));
+            accidentWithState = new AccidentWithState(accidentData, accidentRescueState);*/
+            accidentWithState = buildAccidentWithStateFromCursor(cursor);
+	    }
+		
+		return accidentWithState;
 	}
 	
 	public List<AccidentWithState> getAccidentWithState() {
 		SQLiteDatabase db = this.getReadableDatabase();
+		AccidentWithState accidentWithState = null;
 		List<AccidentWithState> listOfAccidentWithStates = new ArrayList<AccidentWithState>();
-	    Cursor cursor = db.rawQuery(SQL_QUERY_ACCIDENT_WITH_SATE, null);
+	    Cursor cursor = db.rawQuery(SQL_QUERY_ACCIDENTS_WITH_SATE, null);
 	 
 	    if (cursor.moveToFirst()) {
 	        do {
-	        	AccidentData accidentData = new AccidentData();
+	        	/*AccidentData accidentData = new AccidentData();
 	        	AccidentRescueState accidentRescueState = new AccidentRescueState();
 	        	accidentData.setAccidentID(cursor.getInt(0));
 	        	accidentData.setPosition(new Position(cursor.getDouble(2), cursor.getDouble(1)));
@@ -188,11 +246,36 @@ public class ApplicationDbHelper extends SQLiteOpenHelper {
 	        	accidentRescueState.setDateTime(ApplicationTime.constructDate(cursor.getLong(12)));
 	        	accidentRescueState.setState(cursor.getInt(13));
 	        	accidentRescueState.setAssignDateTime(ApplicationTime.constructDate(cursor.getLong(14)));
-	            AccidentWithState accidentWithState = new AccidentWithState(accidentData, accidentRescueState);
+	            AccidentWithState accidentWithState = new AccidentWithState(accidentData, accidentRescueState);*/
+	            accidentWithState = buildAccidentWithStateFromCursor(cursor);
 	            listOfAccidentWithStates.add(accidentWithState);
 	        } while (cursor.moveToNext());
 	    }
 		
 		return listOfAccidentWithStates;
+	}
+	
+	private AccidentWithState buildAccidentWithStateFromCursor(Cursor cursor) {
+		AccidentWithState accidentWithState = null;
+		AccidentData accidentData = new AccidentData();
+    	AccidentRescueState accidentRescueState = new AccidentRescueState();
+    	
+    	accidentData.setAccidentID(cursor.getInt(0));
+    	accidentData.setPosition(new Position(cursor.getDouble(2), cursor.getDouble(1)));
+    	accidentData.setAdditionalInfo(
+    			new AdditionalInfo(cursor.getString(3), 
+    							   cursor.getInt(4), 
+    							   cursor.getInt(5), 
+    							   intToBoolean(cursor.getInt(6)), 
+    							   cursor.getString(7)));
+    	accidentData.setDateTime(ApplicationTime.constructDate(cursor.getLong(8)));
+    	accidentData.setServerDateTime(ApplicationTime.constructDate(cursor.getLong(9)));
+    	accidentData.setResolve(intToBoolean(cursor.getInt(10)));
+    	accidentRescueState.setDateTime(ApplicationTime.constructDate(cursor.getLong(12)));
+    	accidentRescueState.setState(cursor.getInt(13));
+    	accidentRescueState.setAssignDateTime(ApplicationTime.constructDate(cursor.getLong(14)));
+        accidentWithState = new AccidentWithState(accidentData, accidentRescueState);
+        
+        return accidentWithState;
 	}
 }

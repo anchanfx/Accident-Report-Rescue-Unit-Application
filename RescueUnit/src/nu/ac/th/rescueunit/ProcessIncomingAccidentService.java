@@ -74,7 +74,10 @@ public class ProcessIncomingAccidentService extends IntentService {
 				ApplicationTime.newDateInstance(),
 				RescueState.PENDING);
 		accidentWithState = new AccidentWithState(accidentData, accidentRescueState);
+		AccidentWithState queryAccidentWithState = null;
+		int queryAccidentState = 0;
 		
+		/*
 		try {
 			db.addAccidentData(accidentData);
 		} catch (SQLiteConstraintException e) {
@@ -82,19 +85,33 @@ public class ProcessIncomingAccidentService extends IntentService {
 			// Assume duplication on AccidentData
 		}
 
-		reportPendingState(accidentPollingData, accidentRescueState);
+		reportPendingState(accidentPollingData, accidentRescueState);*/
 		
 		// Check Accident Duplication
-			// IF NO
-				// INSERT ACCIDENT + PENDING STATE
-				// REPORT
+		queryAccidentWithState = db.getSpecificAccidentWithState(accidentData.getAccidentID());
+		
+		if(queryAccidentWithState != null) {
 			// IF YES
-				// Check latest rescue state of this specific accident
-					// IF EQUAL TO RED STATE or EMPTY
-						// INSERT NEW PENDING STATE
-						// REPORT
-					// IF NO
-						// DO NOTHING
+			// Check latest rescue state of this specific accident
+			queryAccidentState = queryAccidentWithState.getAccidentRescueState().getState();
+			if(queryAccidentState == RescueState.ABANDON || 
+					queryAccidentState == RescueState.REJECT) {
+				// IF EQUAL TO RED STATE
+				// REPORT
+				// INSERT NEW PENDING STATE
+				reportPendingState(accidentPollingData, accidentRescueState);
+			} else {
+				// IF NO
+				// DO NOTHING
+				stopSelfService();
+			}
+		} else {
+			// IF NO
+			// INSERT ACCIDENT + PENDING STATE
+			// REPORT
+			db.addAccidentData(accidentData);
+			reportPendingState(accidentPollingData, accidentRescueState);
+		}	
 	}
 	
 	private void reportPendingState(AccidentPollingData accidentPollingData, 
@@ -135,11 +152,10 @@ public class ProcessIncomingAccidentService extends IntentService {
 				MISSION_REPORT);
 		
 		ApplicationNotification.sendNotification(param);*/
-		LocalBroadcastManager.getInstance(this).unregisterReceiver(missionReportBroadcastReceiver);
 		sendLocalBroadCast();
 		notifyIncomingAccident(accidentWithState);
 
-		stopSelf();
+		stopSelfService();
 	}
 	
 	/**
@@ -176,5 +192,10 @@ public class ProcessIncomingAccidentService extends IntentService {
 		Intent intent = new Intent(BROADCAST);
 	    intent.putExtra(MESSAGE, "");
 	    broadcaster.sendBroadcast(intent);
+	}
+	
+	private void stopSelfService() {
+		LocalBroadcastManager.getInstance(this).unregisterReceiver(missionReportBroadcastReceiver);
+		stopSelf();
 	}
 }
