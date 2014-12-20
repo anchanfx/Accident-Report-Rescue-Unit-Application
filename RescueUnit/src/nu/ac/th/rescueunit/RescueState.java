@@ -15,6 +15,12 @@ public class RescueState {
 	private int code;
 	private String name;
 	
+	private static final String ABANDON_STR = "Abandon";
+	private static final String REJECT_STR = "Reject";
+	private static final String PENDING_STR = "Pending";
+	private static final String ACCEPT_STR = "Accept";
+	private static final String COMPLETE_STR = "Complete";
+	
 	public RescueState(int code, String name) {
 		super();
 		this.code = code;
@@ -43,9 +49,35 @@ public class RescueState {
 	
 	private static final List<RescueState> generateInProcessState() {
 		List<RescueState> listOfRescueState = new ArrayList<RescueState>();
-		listOfRescueState.add(new RescueState(COMPLETE, "Complete"));
-		listOfRescueState.add(new RescueState(ABANDON, "Abandon"));
+		listOfRescueState.add(new RescueState(COMPLETE, COMPLETE_STR));
+		listOfRescueState.add(new RescueState(ABANDON, ABANDON_STR));
 		
 		return listOfRescueState;
+	}
+	
+	public static String stateNumberToString(int stateNumber) {
+		String stateString = "";
+		
+		switch (stateNumber) {
+			case ABANDON:
+				stateString = ABANDON_STR;
+				break;
+			case REJECT:
+				stateString = REJECT_STR;
+				break;
+			case PENDING:
+				stateString = PENDING_STR;
+				break;
+			case ACCEPT:
+				stateString = ACCEPT_STR;
+				break;
+			case COMPLETE:
+				stateString = COMPLETE_STR;
+				break;
+			default:
+				break;
+		}
+		
+		return stateString;
 	}
 }

@@ -50,7 +50,7 @@ public class AccidentRescueState implements Serializable {
 	@Override
 	public String toString() {
 		String str1 = "AssignDate : " + ApplicationTime.dateToString(this.assignDateTime) + "\n";
-		String str2 = "State : " + this.state;
+		String str2 = "State : " + RescueState.stateNumberToString(this.state);
 	    return  str1 + str2;
 	}
 }

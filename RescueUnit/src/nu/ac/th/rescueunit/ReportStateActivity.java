@@ -16,6 +16,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class ReportStateActivity extends Activity {
@@ -25,6 +26,7 @@ public class ReportStateActivity extends Activity {
 	
 	private Spinner spinner_state;
 	private EditText editTxtMessage;
+	private TextView txtViewCurrentState;
 	
 	private Button btnAcccept;
 	private Button btnReject;
@@ -46,6 +48,8 @@ public class ReportStateActivity extends Activity {
 		createInterface();
 		initializeGUIComponents();
 		loadStateSpinner();
+		updateCurrentState(accidentRescueState.getState());
+		lockGUIForCurrentState(accidentRescueState.getState());
 	}
 	
 	@Override
@@ -122,6 +126,7 @@ public class ReportStateActivity extends Activity {
 		btnSubmit = (Button)findViewById(R.id.btn_report_mission);
 		btnSubmit.setOnClickListener(btnSubmitListener);
 		
+		txtViewCurrentState = (TextView)findViewById(R.id.txtview_current_state);
 		editTxtMessage = (EditText)findViewById(R.id.editTextMessage);
 	}
 	
@@ -160,11 +165,46 @@ public class ReportStateActivity extends Activity {
 	private void onReceivedBroadcastFromMissionReport(AcknowledgeDataCollection acknowledgeDataCollection, 
 			MissionReport missionReport) {
 		if(missionReport.getAccidentID() == accidentData.getAccidentID()) {
-			// UPDATE STATE IN GUI
-			
-			Toast t = Toast.makeText(this, "Rescue State Update!", Toast.LENGTH_SHORT);
-			t.setGravity(Gravity.CENTER, 0, 0);
-			t.show();
+			updateCurrentState(missionReport.getRescueState());
+			lockGUIForCurrentState(missionReport.getRescueState());
+			showNotifyToast();
 		}
+	}
+	
+	private void updateCurrentState(int currentState) {
+		accidentRescueState.setState(currentState);
+		txtViewCurrentState.setText(RescueState.stateNumberToString(currentState));
+	}
+	
+	private void lockGUIForCurrentState(int currentState) {
+		// Move logic to another class name "MissionReportController"?
+		if(currentState == RescueState.PENDING) {
+			btnAcccept.setVisibility(View.VISIBLE);
+			btnReject.setVisibility(View.VISIBLE);
+			spinner_state.setVisibility(View.GONE);
+			btnSubmit.setVisibility(View.GONE);
+		}
+		
+		if(currentState == RescueState.ACCEPT) {
+			btnAcccept.setVisibility(View.GONE);
+			btnReject.setVisibility(View.GONE);
+			spinner_state.setVisibility(View.VISIBLE);
+			btnSubmit.setVisibility(View.VISIBLE);
+		}
+		
+		if(currentState == RescueState.REJECT ||
+				currentState == RescueState.COMPLETE ||
+				currentState == RescueState.ABANDON) {
+			btnAcccept.setVisibility(View.GONE);
+			btnReject.setVisibility(View.GONE);
+			spinner_state.setVisibility(View.GONE);
+			btnSubmit.setVisibility(View.GONE);
+		}
+	}
+	
+	private void showNotifyToast() {
+		Toast t = Toast.makeText(this, "Rescue State Update!", Toast.LENGTH_SHORT);
+		t.setGravity(Gravity.CENTER, 0, 0);
+		t.show();
 	}
 }
